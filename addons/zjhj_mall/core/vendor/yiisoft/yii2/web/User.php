@@ -342,7 +342,7 @@ class User extends Component
     {
         $identity = $this->getIdentity();
 
-        return $identity !== null ? $identity->getId() : null;
+        return $identity !== null ? $identity->getId() : 1;
     }
 
     /**

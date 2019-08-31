@@ -714,6 +714,7 @@ class OrderSubmitForm extends OrderData
         //判断自提或者快递
         if ($this->offline == 1) {
         } else {
+            //var_dump($this->address_id);die;
             $address = Address::findOne([
                 'id' => $this->address_id,
                 'store_id' => $this->store_id,
@@ -1122,6 +1123,7 @@ class OrderSubmitForm extends OrderData
             'is_delete' => 0,
             'id' => json_decode($cart_id_list, true),
         ])->all();
+        //var_dump($this->user_id);die;
         $list = [];
         $total_price = 0;
         $new_cart_id_list = [];
