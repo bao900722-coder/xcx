@@ -5,12 +5,12 @@ $config = array();
 
 $config['db']['master']['host'] = '127.0.0.1';
 $config['db']['master']['username'] = 'root';
-$config['db']['master']['password'] = 'Wangbao900722';
+$config['db']['master']['password'] = '123456';
 $config['db']['master']['port'] = '3306';
 $config['db']['master']['database'] = 'xcx';
 $config['db']['master']['charset'] = 'utf8';
 $config['db']['master']['pconnect'] = 0;
-$config['db']['master']['tablepre'] = 'ims_';
+$config['db']['master']['tablepre'] = 'hjmallind_';
 
 $config['db']['slave_status'] = false;
 $config['db']['slave']['1']['host'] = '';
