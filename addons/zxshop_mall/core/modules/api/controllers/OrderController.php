@@ -99,7 +99,7 @@ class OrderController extends Controller
     public function actionPayData()
     {
         $form = new OrderPayDataForm();
-        $form->attributes = \Yii::$app->request->get();
+        $form->attributes = \Yii::$app->request->post();
         $form->store_id = $this->store->id;
         $form->user = \Yii::$app->user->identity;
         return new BaseApiResponse($form->search());

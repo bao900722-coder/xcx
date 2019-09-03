@@ -16,6 +16,7 @@ class LoginBehavior extends ActionFilter
 {
     public function beforeAction($e)
     {
+        //todo by wangbao
 //        $access_token = \Yii::$app->request->get('access_token');
 //        if (!$access_token) {
 //            $access_token = \Yii::$app->request->post('access_token');
