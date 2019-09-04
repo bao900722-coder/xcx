@@ -110,7 +110,7 @@ class GoodsListForm extends ApiModel
                 'g.addtime' => SORT_DESC,
             ]);
         }
-
+//var_dump($this->limit);die;
         $od_query = OrderDetail::find()->alias('od')
             ->leftJoin(['o' => Order::tableName()], 'od.order_id=o.id')
             ->where(['od.is_delete' => 0, 'o.store_id' => $this->store_id, 'o.is_pay' => 1, 'o.is_delete' => 0])->groupBy('od.goods_id')->select('SUM(od.num) num,od.goods_id');
