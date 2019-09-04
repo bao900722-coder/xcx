@@ -13,6 +13,8 @@ use app\modules\api\models\LoginForm;
 use app\modules\api\models\LoginFormMobile;
 use app\modules\api\models\SmsMobileRecord;
 use app\utils\Sms;
+use app\hejiang\ApiResponse;
+use app\hejiang\BaseApiResponse;
 
 class PassportController extends Controller
 {
@@ -58,7 +60,15 @@ class PassportController extends Controller
         $result['body'] = $body;
         return $result;
     }
-
+    /**
+     * @param $code 状态码
+     * @param array $user_info 用户信息json
+     * @param $encrypted_data 用户信息的加密数据
+     * @param $iv 加密算法的初始向量
+     * @param signature 签名字符串
+     * @param $_platform 传my走阿里小程序，传wx走微信小程序
+     * @return array
+     */
     public function actionLogin()
     {
         $form = new LoginForm();
@@ -76,55 +86,22 @@ class PassportController extends Controller
     {
         $body=array();
         $form = new LoginFormMobile();
-        $contact_way = \Yii::$app->request->post('contact_way');
-        $password    = \Yii::$app->request->post('password');
-        $preg_phone = "/^1[23456789]\d{9}$/";
-        $preg_pw    = "/^[A-Za-z0-9]{6,20}$/";
-        if(!preg_match($preg_phone,$contact_way)){//验证手机号
-            return $this->ResultReturn(101);
-        }
-        if(!preg_match($preg_pw,$password)){//验证密码
-            return $this->ResultReturn(102);
-        }
-        $result=$form->searchOne($contact_way,$password);
-        // print_r($result);die;
-        if($result['code']==0){
-            $body=array(
-                'list'=>$result['data'],
-            );
-            return $this->ResultReturn(0,$body);
-        }else{
-            return $this->ResultReturn(103);
-        }
+        $form->attributes = \Yii::$app->request->post();
+        $form->store_id = $this->store->id;
+
+        return $form->searchOne();
+
+        
     }
     //注册
     public function actionRegister()
     {
         $body=array();
         $form = new LoginFormMobile();
-        $contact_way = \Yii::$app->request->post('contact_way');
-        $password    = \Yii::$app->request->post('password');
-        $vcode       = \Yii::$app->request->post('vcode');
-        $preg_phone = "/^1[23456789]\d{9}$/";
-        $preg_pw    = "/^[A-Za-z0-9]{6,20}$/";
-        if(!preg_match($preg_phone,$contact_way)){//验证手机号
-            return $this->ResultReturn(101);
-        }
-        if(!preg_match($preg_pw,$password)){//验证密码
-            return $this->ResultReturn(102);
-        }
-        $result=$form->register($contact_way,$password);
-        print_r($result);die;
-        if($result['code']==0){
-            $body=array(
-                'id'=>$result['data'],
-            );
-            return $this->ResultReturn(0,$body);
-        }elseif($result['code']==400){
-            return $this->ResultReturn(104);
-        }elseif($result['code']==400){
-            return $this->ResultReturn(104);
-        }
+        $form->attributes = \Yii::$app->request->post();
+        $form->store_id = $this->store->id;
+
+        return $form->register();
     }
     //找回密码
     public function actionForgetPassword()
@@ -132,28 +109,10 @@ class PassportController extends Controller
         
         $body=array();
         $form = new LoginFormMobile();
-        $contact_way = \Yii::$app->request->post('contact_way');
-        $password    = \Yii::$app->request->post('password');
-        $preg_phone = "/^1[23456789]\d{9}$/";
-        $preg_pw    = "/^[A-Za-z0-9]{6,20}$/";
-        if(!preg_match($preg_phone,$contact_way)){//验证手机号
-            return $this->ResultReturn(101);
-        }
-        if(!preg_match($preg_pw,$password)){//验证密码
-            return $this->ResultReturn(102);
-        }
-        $result=$form->forgetPassword($contact_way,$password);
-
-        if($result['code']==0){
-            $body=array(
-                'id'=>$result['data'],
-            );
-            return $this->ResultReturn(0,$body);
-        }elseif($result['code']==400){
-            return $this->ResultReturn(105);
-        }elseif($result['code']==401){
-            return $this->ResultReturn(103);
-        }
+        $form->attributes = \Yii::$app->request->post();
+        $form->store_id = $this->store->id;
+        return $form->forgetPassword();
+        
     }
 
 
@@ -161,24 +120,10 @@ class PassportController extends Controller
     public function actionGetCode(){
 
         $form = new Sms();
+
         $contact_way = \Yii::$app->request->post('contact_way');
-        $preg_phone = "/^1[23456789]\d{9}$/";
-        if(!preg_match($preg_phone,$contact_way)){//验证手机号
-            return $this->ResultReturn(101);
-        }
-        
-        $sign='有商互联';
         $code = mt_rand(100000, 999999);
-        $content="验证码".$code."，您正在注册成为新用户，感谢您的支持！";
-        $result=$form->send_code_text($sign, $code, $contact_way);
-        print_r($result);die;
-        if($result['code']==0){
-            return $this->ResultReturn(0);
-        }elseif($result['code']==2){
-            return $this->ResultReturn(2,[],$result['msg']);
-        }else{
-            return $this->ResultReturn($result['code']);
-        }
+        return new BaseApiResponse($form->send_text($this->store->id, $code, $contact_way));
     }
     //验证手机验证码 ajax调用
     public function actionCheckValcode(){

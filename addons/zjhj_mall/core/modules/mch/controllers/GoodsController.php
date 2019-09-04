@@ -68,7 +68,7 @@ class GoodsController extends Controller
 
     public function actionGetCatList($parent_id = 0)
     {
-        $list = Cat::find()->select('id,name')->where(['is_delete' => 0, 'parent_id' => $parent_id, 'store_id' => $this->store->id])->asArray()->all();
+        $list = Cat::find()->select('id,name')->where(['is_delete' => 0, 'parent_id' => $parent_id, 'store_id' => $this->store->id])->orderBy(['sort'=>SORT_ASC])->asArray()->all();
         return [
             'code' => 0,
             'data' => $list,
@@ -116,6 +116,7 @@ class GoodsController extends Controller
      */
     public function actionGoodsEdit($id = 0)
     {
+
         $goods = Goods::findOne(['id' => $id, 'store_id' => $this->store->id, 'mch_id' => 0]);
         if (!$goods) {
             $goods = new Goods();
@@ -153,7 +154,7 @@ class GoodsController extends Controller
         $searchForm->goods = $goods;
         $searchForm->store = $this->store;
         $list = $searchForm->search();
-
+        // print_r($list);die;
         $args = new EventArgument();
         $args['goods'] = $goods;
         \Yii::$app->eventDispatcher->dispatch(new BaseAddGoodsEvent(), $args);

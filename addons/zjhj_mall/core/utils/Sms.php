@@ -263,9 +263,9 @@ class Sms
             'msg' => '成功'
         ];
     }
-    public static function send_code_text($sign, $content = null, $mobile)
+    public static function send_code_text($store_id, $content = null, $mobile)
     {
-        $sms_setting = SmsSetting::findOne(['is_delete' => 0, 'sign' => $sign]);
+        $sms_setting = SmsSetting::findOne(['is_delete' => 0, 'store_id' => $store_id]);
         $mobile_cache = \Yii::$app->cache->get('mobile_cache' . $mobile);
         if ($mobile_cache) {
             return [

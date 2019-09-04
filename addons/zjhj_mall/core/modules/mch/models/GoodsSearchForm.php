@@ -39,7 +39,7 @@ class GoodsSearchForm extends MchModel
     public function search()
     {
         $goods = $this->goods;
-        $catList = Cat::find()->where(['store_id' => $this->store->id, 'is_delete' => 0, 'parent_id' => 0])->all();
+        $catList = Cat::find()->where(['store_id' => $this->store->id, 'is_delete' => 0, 'parent_id' => 0])->orderBy(['sort'=>SORT_ASC])->all();
         $postageRiles = PostageRules::find()->where(['store_id' => $this->store->id, 'is_delete' => 0])->all();
         $cardList = Card::find()->where(['store_id' => $this->store->id, 'is_delete' => 0])->asArray()->all();
         if ($goods->full_cut) {

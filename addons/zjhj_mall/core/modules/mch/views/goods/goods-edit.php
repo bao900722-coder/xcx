@@ -229,7 +229,7 @@ if (!$returnUrl) {
                                 <div>
                                     <span>选择分类</span>
                                     <br>
-                                    <a class="addcat" href="javascript:">添加新分类</a>
+                                    <a href="javascript:">添加新分类</a>
                                     <span class="step-location" id="step1"></span>
                                 </div>
                                 <div>
@@ -239,20 +239,40 @@ if (!$returnUrl) {
                                         </div>
                                         <div class="col-9">
                                             <div class="input-group short-row">
-                                                <input readonly class="form-control cat-name" v-model="item.cat_name">
+                                                <!-- <input readonly class="form-control cat-name" v-model="item.cat_name">
                                                 <input type="hidden" name="model[cat_id][]" class="form-control cat-id"
-                                                       v-model="item.cat_id">
+                                                       v-model="item.cat_id"> -->
+                                                <select class="form-control short-row parents" name="model[cat_id][]">
+                                                    <option value="0"></option>
+                                                    <?php foreach ($cat_list as $p) : ?>
+                                                        <option
+                                                                value="<?= $p->id ?>" <?= $p->id == $goods['name'] ? 'selected' : '' ?>><?= $p->name ?></option>
+                                                    <?php endforeach; ?>
+                                                </select>
                                                 <span class="input-group-btn">
-                                                    <a class="btn btn-secondary cat-modal" href="javascript:" data-toggle="modal"
-                                                        data-target="#catModal" :data-index="i">选择分类</a>
+                                                    <a class="btn btn-secondary" href="javascript:" data-toggle="modal" :data-index="i">选择一级分类</a>
                                                 </span>
                                                 <span class="input-group-btn">
-                                                    <a class="btn btn-danger delete-cat" href="javascript:" :data-index="i">删除</a>
+                                                    <a class="btn btn-danger delete-cat-parents" href="javascript:" :data-index="i">删除</a>
+                                                </span>
+                                            </div>
+                                            <div class="input-group short-row" style="margin-top: .75rem;">
+                                                <!-- <input readonly class="form-control cat-name" v-model="item.cat_name">
+                                                <input type="hidden" name="model[cat_id][]" class="form-control cat-id"
+                                                       v-model="item.cat_id"> -->
+                                                <select class="form-control short-row son" name="model[cat_id][]">
+                                                    <option value="0"></option>
+                                                </select>
+                                                <span class="input-group-btn">
+                                                    <a class="btn btn-secondary" href="javascript:" data-toggle="modal" :data-index="i">选择二级分类</a>
+                                                </span>
+                                                <span class="input-group-btn">
+                                                    <a class="btn btn-danger delete-cat-son" href="javascript:" :data-index="i">删除</a>
                                                 </span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group row">
+                                    <!-- <div class="form-group row">
                                         <div class="col-3 text-right">
                                             <label class=" col-form-label">淘宝一键采集</label>
                                         </div>
@@ -304,7 +324,7 @@ if (!$returnUrl) {
                                             <div class="short-row text-muted fs-sm">若不使用，则该项为空</div>
                                             <div class="copy-error text-danger fs-sm" hidden></div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
 
@@ -330,6 +350,15 @@ if (!$returnUrl) {
                                         <div class="col-9">
                                             <input class="form-control short-row" type="text" name="model[unit]"
                                                    value="<?= $goods['unit'] ? $goods['unit'] : '件' ?>">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-3 text-right">
+                                            <label class=" col-form-label required">商品简介</label>
+                                        </div>
+                                        <div class="col-9">
+                                            <input class="form-control short-row" type="text" name="model[intro]"
+                                                   value="<?= str_replace("\"", "&quot", $goods['intro']) ?>">
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -848,7 +877,7 @@ if (!$returnUrl) {
         </form>
 
         <!-- 选择分类 -->
-        <div class="modal fade" id="catModal" tabindex="-1" role="dialog"
+        <!-- <div class="modal fade" id="catModal" tabindex="-1" role="dialog"
              aria-labelledby="catModalLabel"
              aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -893,7 +922,7 @@ if (!$returnUrl) {
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>
 
@@ -964,36 +993,66 @@ if (!$returnUrl) {
     });
 
     //分类设置
-    $(document).on('click', '.cat-modal', function () {
-        page.select_i = $(this).data('index');
+    // $(document).on('click', '.cat-modal', function () {
+    //     page.select_i = $(this).data('index');
+    // });
+    //选择分类
+    $(document).on("change", ".parents", function () {
+        var parent_id=$(this).val();
+        var html='<option value="0"></option>';
+        $.ajax({
+            url: "<?=$urlManager->createUrl(['mch/goods/get-cat-list'])?>",
+            data: {
+                parent_id: parent_id,
+            },
+            success: function (res) {
+                console.log(res);
+                if (res.code == 0) {
+                    $(".son").empty()
+                    for (var i = 0; i < res.data.length; i++) {
+                        html+='<option value="'+res.data[i].id+'">'+res.data[i].name+'</option>';
+                    }
+                    $(".son").html(html)
+                }
+            }
+        });
+    });
+    //删除父分类
+    $(document).on("click", ".delete-cat-parents", function () {
+        $('.parents option:first').attr('selected','selected');
+        $('.son option:first').attr('selected','selected');
+    });
+    //删除子分类
+    $(document).on("click", ".delete-cat-son", function () {
+        $('.son option:first').attr('selected','selected');
     });
     //选择分类
-    $(document).on("click", ".cat-confirm", function () {
-        var cat_name = $.trim($(".cat-item.active").text());
-        var cat_id = $(".cat-item.active input").val();
-        if (cat_name && cat_id) {
-            page.goods_cat_list[page.select_i]['cat_id'] = cat_id;
-            page.goods_cat_list[page.select_i]['cat_name'] = cat_name;
-        }
-        $("#catModal").modal("hide");
-    });
+    // $(document).on("click", ".cat-confirm", function () {
+    //     var cat_name = $.trim($(".cat-item.active").text());
+    //     var cat_id = $(".cat-item.active input").val();
+    //     if (cat_name && cat_id) {
+    //         page.goods_cat_list[page.select_i]['cat_id'] = cat_id;
+    //         page.goods_cat_list[page.select_i]['cat_name'] = cat_name;
+    //     }
+    //     $("#catModal").modal("hide");
+    // });
     //添加新分类
-    $(document).on('click', '.addcat', function () {
-        var cat = {};
-        cat.cat_name = '';
-        cat.cat_id = '';
-        page.goods_cat_list.push(cat);
-    });
+    // $(document).on('click', '.addcat', function () {
+    //     var cat = {};
+    //     cat.cat_name = '';
+    //     cat.cat_id = '';
+    //     page.goods_cat_list.push(cat);
+    // });
     //删除分类
-    $(document).on('click', '.delete-cat', function () {
-        page.goods_cat_list.splice($(this).data('index'), 1);
-        if (page.goods_cat_list.length == 0) {
-            var cat = {};
-            cat.cat_name = '';
-            cat.cat_id = '';
-            page.goods_cat_list.push(cat);
-        }
-    });
+    // $(document).on('click', '.delete-cat', function () {
+    //     page.goods_cat_list.splice($(this).data('index'), 1);
+    //     if (page.goods_cat_list.length == 0) {
+    //         var cat = {};
+    //         cat.cat_name = '';
+    //         cat.cat_id = '';
+    //         page.goods_cat_list.push(cat);
+    //     }
+    // });
 
     function getSubCatList() {
         var parent_id = $(".parent-cat-list input:checked").val();
