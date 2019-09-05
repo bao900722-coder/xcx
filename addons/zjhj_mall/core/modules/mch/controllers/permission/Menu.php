@@ -455,6 +455,13 @@ class Menu
                         'name' => '售后订单',
                         'is_menu' => true,
                         'route' => 'mch/order/refund',
+                        'sub' => [
+                            [
+                                'name' => '售后订单详情',
+                                'is_menu' => false,
+                                'route' => 'mch/order/refund-detail'
+                            ],
+                        ],
                     ],
                     [
                         'name' => '评价管理',

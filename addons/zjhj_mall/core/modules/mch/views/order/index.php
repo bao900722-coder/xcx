@@ -377,15 +377,6 @@ $urlPlatform = Yii::$app->requestedRoute;
                             </div>
                         <?php endif; ?>
 
-                        <div>
-                            发货方式：
-                            <?php if ($order_item['is_offline'] == 1) : ?>
-                                <span class="badge badge-warning mt-1">到店自提</span>
-                            <?php else : ?>
-                                <span class="badge badge-warning mt-1">快递发送</span>
-                            <?php endif; ?>
-                        </div>
-
                     </td>
                     <td class="order-tab-5">
                         <?php if (($order_item['is_pay'] == 1 || $order_item['pay_type'] == 2) && $order_item['is_confirm'] != 1 && $order_item['apply_delete'] == 0) : ?>
@@ -454,19 +445,7 @@ $urlPlatform = Yii::$app->requestedRoute;
                                    data-content="是否确认收货？">确认收货</a>
                             </div>
                         <?php endif; ?>
-                        <?php if ($order_item['is_recycle'] == 1) : ?>
-                            <div>
-                                <a class="btn btn-sm btn-primary del mt-2" href="javascript:"
-                                   data-url="<?= $urlManager->createUrl([$urlStr . '/edit', 'order_id' => $order_item['id'], 'is_recycle' => 0]) ?>"
-                                   data-content="是否移出回收站">移出回收站</a>
-                            </div>
-                        <?php else : ?>
-                            <div>
-                                <a class="btn btn-sm btn-danger del mt-2" href="javascript:"
-                                   data-url="<?= $urlManager->createUrl([$urlStr . '/edit', 'order_id' => $order_item['id'], 'is_recycle' => 1]) ?>"
-                                   data-content="是否移入回收站">移入回收站</a>
-                            </div>
-                        <?php endif; ?>
+                        
                     </td>
                 </tr>
                 <tr>

@@ -24,6 +24,7 @@ use app\modules\mch\models\OrderDetailForm;
 use app\modules\mch\models\OrderListForm;
 use app\modules\mch\models\OrderPriceForm;
 use app\modules\mch\models\OrderRefundForm;
+use app\modules\mch\models\OrderRefundDetailForm;
 use app\modules\mch\models\OrderRefundListForm;
 use app\modules\mch\models\OrderSendForm;
 use app\modules\mch\models\PrintForm;
@@ -189,7 +190,7 @@ class OrderController extends Controller
             }
         }
         unset($v);
-
+        
         return $this->render('refund', [
             'row_count' => $data['row_count'],
             'pagination' => $data['pagination'],
@@ -282,7 +283,18 @@ class OrderController extends Controller
         $arr['is_update'] = true;
         return $this->render('detail', $arr);
     }
+    //售后订单详情
+    public function actionRefundDetail($refund_id = null)
+    {
+        $form = new OrderRefundDetailForm();
+        $form->store_id = $this->store->id;
+        $form->order_refund_id = $refund_id;
+        $arr = $form->search();
+        // print_r($arr);die;
+        // $arr['is_update'] = true;
 
+        return $this->render('refund-detail', $arr);
+    }
     public function actionOffline()
     {
         $form = new OrderListForm();

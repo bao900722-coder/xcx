@@ -46,10 +46,6 @@ if (!$returnUrl) {
         margin: 0;
     }
 
-    .cat-box .cat-item:last-child {
-        border-bottom: none;
-    }
-
     .cat-box .cat-item:hover {
         background: rgba(0, 0, 0, .05);
     }
@@ -189,6 +185,22 @@ if (!$returnUrl) {
         max-width: 160px;
         width: 160px;
     }
+    .input-group-addon-service{
+        margin-bottom: 0;
+        margin-right: 1rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.25;
+        color: #464a4c;
+        text-align: center;
+        border: 1px solid rgba(0,0,0,.15);
+        border-radius: .25rem;
+        padding: .35rem .7rem;
+
+    }
+    .delelt-span{
+        padding-left: 0.8rem;
+    }
 </style>
 
 
@@ -220,7 +232,7 @@ if (!$returnUrl) {
                                     <a flex="cross:center" class="head-step" href="#step2">基本信息</a>
                                     <a flex="cross:center" <?= in_array(get_plugin_type(), [5]) ? 'hidden' : '' ?> class="head-step" href="#step6">营销</a>
                                     <a flex="cross:center" <?= in_array(get_plugin_type(), [0,5]) ? 'hidden' : '' ?> class="head-step" href="#step9">砍价设置</a>
-                                    <a flex="cross:center" <?= in_array(get_plugin_type(), [2,5]) ? 'hidden' : '' ?> class="head-step" href="#step7">快速购买</a>
+                                    <!-- <a flex="cross:center" <?= in_array(get_plugin_type(), [2,5]) ? 'hidden' : '' ?> class="head-step" href="#step7">快速购买</a> -->
                                     <a flex="cross:center" class="head-step" href="#step4">商品详情</a>
                                 </div>
                             </div>
@@ -233,20 +245,24 @@ if (!$returnUrl) {
                                     <span class="step-location" id="step1"></span>
                                 </div>
                                 <div>
-                                    <div class="form-group row" v-for="(item,i) in goods_cat_list">
+                                    <div class="form-group row" >
                                         <div class="col-3 text-right">
                                             <label class=" col-form-label required">商品分类</label>
                                         </div>
                                         <div class="col-9">
+
+                                            <?php if (count($goods_cat_list) > 0) : ?>
+                                                
                                             <div class="input-group short-row">
-                                                <!-- <input readonly class="form-control cat-name" v-model="item.cat_name">
-                                                <input type="hidden" name="model[cat_id][]" class="form-control cat-id"
-                                                       v-model="item.cat_id"> -->
                                                 <select class="form-control short-row parents" name="model[cat_id][]">
                                                     <option value="0"></option>
                                                     <?php foreach ($cat_list as $p) : ?>
-                                                        <option
-                                                                value="<?= $p->id ?>" <?= $p->id == $goods['name'] ? 'selected' : '' ?>><?= $p->name ?></option>
+                                                        <?php if ($goods_cat_list[0]['cat_id']== $p->id): ?>
+                                                            <option value="<?= $p->id ?>" selected><?= $p->name ?></option>
+                                                        <?php else : ?>
+                                                            <option value="<?= $p->id ?>"><?= $p->name ?></option>
+                                                        <?php endif; ?>
+                                                        
                                                     <?php endforeach; ?>
                                                 </select>
                                                 <span class="input-group-btn">
@@ -256,75 +272,58 @@ if (!$returnUrl) {
                                                     <a class="btn btn-danger delete-cat-parents" href="javascript:" :data-index="i">删除</a>
                                                 </span>
                                             </div>
-                                            <div class="input-group short-row" style="margin-top: .75rem;">
-                                                <!-- <input readonly class="form-control cat-name" v-model="item.cat_name">
-                                                <input type="hidden" name="model[cat_id][]" class="form-control cat-id"
-                                                       v-model="item.cat_id"> -->
-                                                <select class="form-control short-row son" name="model[cat_id][]">
-                                                    <option value="0"></option>
-                                                </select>
-                                                <span class="input-group-btn">
-                                                    <a class="btn btn-secondary" href="javascript:" data-toggle="modal" :data-index="i">选择二级分类</a>
-                                                </span>
-                                                <span class="input-group-btn">
-                                                    <a class="btn btn-danger delete-cat-son" href="javascript:" :data-index="i">删除</a>
-                                                </span>
-                                            </div>
+                                                <div class="input-group short-row" style="margin-top: .75rem;">
+                                                    
+                                                    <select class="form-control short-row son" name="model[cat_id][]">
+                                                        <option value="0"></option>
+                                                        <?php foreach ($goods_cat_son_list as $p) : ?>
+                                                            <?php if ($goods_cat_list[1]['cat_id']== $p['id']): ?>
+                                                                <option value="<?= $p['id'] ?>" selected><?= $p['name'] ?></option>
+                                                            <?php else : ?>
+                                                                <option value="<?= $p['id'] ?>"><?= $p['name'] ?></option>
+                                                            <?php endif; ?>
+                                                        <?php endforeach; ?>
+
+                                                    </select>
+                                                    <span class="input-group-btn">
+                                                        <a class="btn btn-secondary" href="javascript:" data-toggle="modal" :data-index="i">选择二级分类</a>
+                                                    </span>
+                                                    <span class="input-group-btn">
+                                                        <a class="btn btn-danger delete-cat-son" href="javascript:" :data-index="i">删除</a>
+                                                    </span>
+                                                </div>
+                                            <?php else : ?>
+                                                <div class="input-group short-row">
+                                                    <select class="form-control short-row parents" name="model[cat_id][]">
+                                                        <option value="0"></option>
+                                                        <?php foreach ($cat_list as $p) : ?>
+                                                            <option
+                                                                    value="<?= $p->id ?>" <?= $p->id == $goods['name'] ? 'selected' : '' ?>><?= $p->name ?></option>
+                                                        <?php endforeach; ?>
+                                                    </select>
+                                                    <span class="input-group-btn">
+                                                        <a class="btn btn-secondary" href="javascript:" data-toggle="modal" :data-index="i">选择一级分类</a>
+                                                    </span>
+                                                    <span class="input-group-btn">
+                                                        <a class="btn btn-danger delete-cat-parents" href="javascript:" :data-index="i">删除</a>
+                                                    </span>
+                                                </div>
+                                                <div class="input-group short-row" style="margin-top: .75rem;">
+                                                    
+                                                    <select class="form-control short-row son" name="model[cat_id][]">
+                                                        <option value="0"></option>
+                                                    </select>
+                                                    <span class="input-group-btn">
+                                                        <a class="btn btn-secondary" href="javascript:" data-toggle="modal" :data-index="i">选择二级分类</a>
+                                                    </span>
+                                                    <span class="input-group-btn">
+                                                        <a class="btn btn-danger delete-cat-son" href="javascript:" :data-index="i">删除</a>
+                                                    </span>
+                                                </div>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
-                                    <!-- <div class="form-group row">
-                                        <div class="col-3 text-right">
-                                            <label class=" col-form-label">淘宝一键采集</label>
-                                        </div>
-                                        <div class="col-9">
-                                            <div class="input-group short-row">
-                                                <input class="form-control copy-url" placeholder="请输入淘宝商品详情地址连接">
-                                                <span class="input-group-btn">
-                                                <a class="btn btn-secondary copy-btn" href="javascript:">立即获取</a>
-                                            </span>
-                                            </div>
-                                            <div class="short-row text-muted fs-sm">
-                                                例如：商品链接为:http://item.taobao.com/item.htm?id=522155891308
-                                                或:http://detail.tmall.com/item.htm?id=522155891308
-                                            </div>
-                                            <div class="short-row text-muted fs-sm">若不使用，则该项为空</div>
-                                            <div class="copy-error text-danger fs-sm" hidden></div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row" hidden>
-                                        <div class="col-3 text-right">
-                                            <label class=" col-form-label">京东一键采集</label>
-                                        </div>
-                                        <div class="col-9">
-                                            <div class="input-group short-row">
-                                                <input class="form-control copy-url" placeholder="请输入京东商品详情地址连接">
-                                                <span class="input-group-btn">
-                                                <a class="btn btn-secondary copy-btn" href="javascript:">立即获取</a>
-                                            </span>
-                                            </div>
-                                            <div class="short-row text-muted fs-sm">
-                                                例如：商品链接为:https://item.jd.com/5346660.html
-                                            </div>
-                                            <div class="short-row text-muted fs-sm">若不使用，则该项为空</div>
-                                            <div class="copy-error text-danger fs-sm" hidden></div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-3 text-right">
-                                            <label class=" col-form-label">商城商品拉取</label>
-                                        </div>
-                                        <div class="col-9">
-                                            <div class="input-group short-row">
-                                                <input class="form-control copy-mall-id" name="mall_id" type="number"
-                                                       placeholder="请输入商城商品ID">
-                                                <span class="input-group-btn">
-                                                <a class="btn btn-secondary mall-copy-btn" href="javascript:">立即获取</a>
-                                            </span>
-                                            </div>
-                                            <div class="short-row text-muted fs-sm">若不使用，则该项为空</div>
-                                            <div class="copy-error text-danger fs-sm" hidden></div>
-                                        </div>
-                                    </div> -->
+                                    
                                 </div>
                             </div>
 
@@ -354,7 +353,7 @@ if (!$returnUrl) {
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-3 text-right">
-                                            <label class=" col-form-label required">商品简介</label>
+                                            <label class=" col-form-label">商品简介</label>
                                         </div>
                                         <div class="col-9">
                                             <input class="form-control short-row" type="text" name="model[intro]"
@@ -583,10 +582,15 @@ if (!$returnUrl) {
                                             <label class=" col-form-label">服务内容</label>
                                         </div>
                                         <div class="col-9">
-                                            <input class="form-control short-row" name="model[service]"
-                                                   value="<?= $goods['service'] ?>">
-                                            <div class="fs-sm text-muted">例子：正品保障,极速发货,7天退换货。多个请使用英文逗号<kbd>,</kbd>分隔
+                                            
+                                            <div class="input-group short-row service">
+                                                <?php foreach ($service_arr as $p) : ?>
+                                                <span class="input-group-addon-service"><?= $p['name'] ?><span class="delelt-span">×</span></span>
+                                                <?php endforeach; ?>
+                                                <a class="select-service addcat" data-toggle="modal"
+                                                        data-target="#catModal" style="color: #0275d8;">选择</a>
                                             </div>
+                                            
                                         </div>
                                     </div>
 
@@ -671,151 +675,81 @@ if (!$returnUrl) {
                                     <span class="step-location" id="step6"></span>
                                 </div>
                                 <div>
-                                    <div class="form-group row">
-                                        <div class="col-3 text-right">
-                                            <label class=" col-form-label">积分赠送</label>
-                                        </div>
-                                        <div class="col-9">
-                                            <div class="input-group short-row">
-                                                <input type="text" step="1" class="form-control short-row"
-                                                       name="integral[give]"
-                                                       value="<?= $goods['integral']['give'] ?>">
-                                                <span class="input-group-addon">分</span>
-                                            </div>
-                                            <div class="fs-sm text-muted">
-                                                会员购物赠送的积分, 如果不填写或填写0，则默认为不赠送积分，如果带%则为按成交价格的比例计算积分
-                                                <br/>
-                                                如: 购买2件，设置10 积分, 不管成交价格是多少， 则购买后获得20积分
-                                                <br/>
-                                                如: 购买2件，设置10%积分, 成交价格2 * 200= 400， 则购买后获得 40 积分（400*10%）
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-3 text-right">
-                                            <label class=" col-form-label">积分抵扣</label>
-                                        </div>
-                                        <div class="col-9">
-                                            <div class="input-group short-row">
-                                                <span class="input-group-addon">最多抵扣</span>
-                                                <input type="text" step="1" class="form-control short-row"
-                                                       name="integral[forehead]"
-                                                       value="<?= $goods['integral']['forehead'] ?>">
-                                                <span class="input-group-addon">元</span>
-                                            </div>
-                                            <div class="input-group short-row">
-                                                <label class="custom-control custom-checkbox">
-                                                    <input <?= $goods['integral']['more'] == 1 ? 'checked' : null ?>
-                                                            value="1"
-                                                            name="integral[more]"
-                                                            type="checkbox"
-                                                            class="custom-control-input">
-                                                    <span class="custom-control-indicator"></span>
-                                                    <span class="custom-control-description">允许多件累计折扣</span>
-                                                </label>
-                                            </div>
-                                            <div class="fs-sm text-muted">
-                                                如果设置0，则不支持积分抵扣 如果带%则为按成交价格的比例计算抵扣多少元
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--卡券设置-->
-                                    <div class="form-group row">
-                                        <div class="col-3 text-right">
-                                            <label class=" col-form-label">卡券发放</label>
-                                        </div>
-                                        <div class="col-9">
-                                            <div class="input-group short-row">
-                                                <select class="form-control card-list">
-                                                    <option value="-1">无</option>
-                                                    <template v-for="(item,index) in card_list">
-                                                        <option :value="index">{{item.name}}</option>
-                                                    </template>
-                                                </select>
-                                                <a href="javascript:" class="input-group-addon card-add">添加</a>
-                                            </div>
-                                            <div class="fs-sm text-danger">卡券会在用户付款后自动发放给用户</div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row" v-if="goods_card_list.length>0">
-                                        <div class="col-3 text-right">
-                                            <label class=" col-form-label">已添加卡券</label>
-                                        </div>
-                                        <div class="col-9">
-                                            <div class="card short-row p-2 mb-2"
-                                                 v-for="(item,index) in goods_card_list">
-                                                <div flex="dir:left box:last">
-                                                    <input type="hidden" name="goods_card[]" :value="item.id">
-                                                    <div
-                                                            style="width: 100%;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;word-break: break-all">
-                                                        {{item.name}}
-                                                    </div>
-                                                    <div class="pl-2" style="border-left: 1px solid #ddd;">
-                                                        <a href="javascript:" class="card-del"
-                                                           :data-index="index">删除</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- 快速购买开始  -->
-                            <div <?= in_array(get_plugin_type(), [2,5]) ? 'hidden' : '' ?> class="step-block" flex="dir:left box:first">
-                                <div>
-                                    <span>快速购买</span>
-                                    <span class="step-location" id="step7"></span>
-                                </div>
-                                <div>
-                                    <div class="form-group row">
-                                        <div class="col-3 text-right">
-                                            <label class=" col-form-label">是否添加到快速购买</label>
-                                        </div>
+                                    <?php if ($goods['marketing']==1) : ?>
                                         <div class="col-9 col-form-label">
                                             <label class="radio-label">
-                                                <input <?= $goods['quick_purchase'] == 0 ? 'checked' : null ?>
-                                                        value="0" name="model[quick_purchase]" type="radio"
-                                                        class="custom-control-input">
+                                                <input checked="checked" value="1" name="model[marketing]" type="radio" class="custom-control-input">
                                                 <span class="label-icon"></span>
-                                                <span class="label-text">不添加</span>
+                                                <span class="label-text">新品</span>
                                             </label>
                                             <label class="radio-label">
-                                                <input <?= $goods['quick_purchase'] == 1 ? 'checked' : null ?>
-                                                        value="1" name="model[quick_purchase]" type="radio"
-                                                        class="custom-control-input">
+                                                <input value="2" name="model[marketing]" type="radio" class="custom-control-input">
                                                 <span class="label-icon"></span>
-                                                <span class="label-text">添加</span>
+                                                <span class="label-text">秒杀</span>
+                                            </label>
+                                            <label class="radio-label">
+                                                <input value="3" name="model[marketing]" type="radio" class="custom-control-input">
+                                                <span class="label-icon"></span>
+                                                <span class="label-text">团购</span>
                                             </label>
                                         </div>
-                                    </div>
-                                    <div class="form-group row share-commissions">
-                                        <div class="col-3 text-right">
-                                            <label class=" col-form-label">是否添加到热销</label>
-                                        </div>
+                                    <?php elseif ($goods['marketing']==2) : ?>
                                         <div class="col-9 col-form-label">
                                             <label class="radio-label">
-                                                <input <?= $goods->hot_cakes == 0 ? 'checked' : null ?>
-                                                        name="model[hot_cakes]"
-                                                        value="0"
-                                                        type="radio"
-                                                        class="custom-control-input">
+                                                <input value="1" name="model[marketing]" type="radio" class="custom-control-input">
                                                 <span class="label-icon"></span>
-                                                <span class="label-text">不添加</span>
+                                                <span class="label-text">新品</span>
                                             </label>
                                             <label class="radio-label">
-                                                <input <?= $goods->hot_cakes == 1 ? 'checked' : null ?>
-                                                        name="model[hot_cakes]"
-                                                        value="1"
-                                                        type="radio"
-                                                        class="custom-control-input">
+                                                <input checked="checked" value="2" name="model[marketing]" type="radio" class="custom-control-input">
                                                 <span class="label-icon"></span>
-                                                <span class="label-text">添加</span>
+                                                <span class="label-text">秒杀</span>
+                                            </label>
+                                            <label class="radio-label">
+                                                <input value="3" name="model[marketing]" type="radio" class="custom-control-input">
+                                                <span class="label-icon"></span>
+                                                <span class="label-text">团购</span>
                                             </label>
                                         </div>
-                                    </div>
+                                    <?php elseif ($goods['marketing']==3) : ?>
+                                        <div class="col-9 col-form-label">
+                                            <label class="radio-label">
+                                                <input value="1" name="model[marketing]" type="radio" class="custom-control-input">
+                                                <span class="label-icon"></span>
+                                                <span class="label-text">新品</span>
+                                            </label>
+                                            <label class="radio-label">
+                                                <input value="2" name="model[marketing]" type="radio" class="custom-control-input">
+                                                <span class="label-icon"></span>
+                                                <span class="label-text">秒杀</span>
+                                            </label>
+                                            <label class="radio-label">
+                                                <input checked="checked" value="3" name="model[marketing]" type="radio" class="custom-control-input">
+                                                <span class="label-icon"></span>
+                                                <span class="label-text">团购</span>
+                                            </label>
+                                        </div>
+                                    <?php else : ?>
+                                        <div class="col-9 col-form-label">
+                                            <label class="radio-label">
+                                                <input checked="checked" value="1" name="model[marketing]" type="radio" class="custom-control-input">
+                                                <span class="label-icon"></span>
+                                                <span class="label-text">新品</span>
+                                            </label>
+                                            <label class="radio-label">
+                                                <input value="2" name="model[marketing]" type="radio" class="custom-control-input">
+                                                <span class="label-icon"></span>
+                                                <span class="label-text">秒杀</span>
+                                            </label>
+                                            <label class="radio-label">
+                                                <input value="3" name="model[marketing]" type="radio" class="custom-control-input">
+                                                <span class="label-icon"></span>
+                                                <span class="label-text">团购</span>
+                                            </label>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
-                            <!-- 快速购买结束 -->
                             <!--额外设置-->
                             <div class="step-block" flex="dir:left box:first">
                                 <?php foreach ($plugins as $plugin) : ?>
@@ -868,7 +802,7 @@ if (!$returnUrl) {
                     ]) ?>
                 </div>
             </div>
-
+            <input name="model[service_name_arr]" id="service_name_arr" type="hidden" value="<?= $goods['service'] ?>">
             <div style="margin-left: 0;" class="form-group row text-center">
                 <a class="btn btn-primary auto-form-btn" href="javascript:">保存</a>
                 <input type="button" class="btn btn-default ml-4"
@@ -877,10 +811,10 @@ if (!$returnUrl) {
         </form>
 
         <!-- 选择分类 -->
-        <!-- <div class="modal fade" id="catModal" tabindex="-1" role="dialog"
+        <div class="modal fade" id="catModal" tabindex="-1" role="dialog"
              aria-labelledby="catModalLabel"
              aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog" role="document" style="margin-top: 30rem">
                 <div class="modal-content">
                     <div class="modal-header">
                         <b>选择分类</b>
@@ -890,29 +824,16 @@ if (!$returnUrl) {
                     </div>
                     <div class="modal-body">
                         <div class="cat-box">
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="cat-list parent-cat-list">
-                                        <?php foreach ($cat_list as $index => $cat) : ?>
-                                            <label class="cat-item <?= $index == 0 ? 'active' : '' ?>">
-                                                <?= $cat->name ?>
-                                                <input value="<?= $cat->id ?>"
-                                                    <?= $index == 0 ? 'checked' : '' ?>
-                                                       type="radio"
-                                                       name="model[cat_id]">
-                                            </label>
-                                        <?php endforeach; ?>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="cat-list">
-                                        <label class="cat-item" v-for="sub_cat in sub_cat_list">
-                                            {{sub_cat.name}}
-                                            <input v-bind:value="sub_cat.id" type="radio"
-                                                   name="model[cat_id]">
-                                        </label>
-                                    </div>
-                                </div>
+                            <div class="row" style="height: 9rem;">
+                                <?php foreach ($option_arr as $index => $cat) : ?>
+                                    <label class="input-group-addon-service cat-item <?= $index == 0 ? 'active' : '' ?>" style="height: 2.5rem;margin-left: 0.5rem;margin-top: 0.5rem;">
+                                        <?= $cat['service'] ?>
+                                        <input value="<?= $cat['id'] ?>"
+                                            <?= $index == 0 ? 'checked' : '' ?>
+                                               type="checkbox"
+                                               name="model[cat_id]">
+                                    </label>
+                                <?php endforeach; ?>
                             </div>
                         </div>
                     </div>
@@ -922,13 +843,14 @@ if (!$returnUrl) {
                     </div>
                 </div>
             </div>
-        </div> -->
+        </div>
     </div>
 </div>
 
 <?= $this->render('/layouts/attrs/common', [
     'page_type' => 'STORE',
     'goods' => $goods,
+    'service_arr' => $service_arr,
     'goods_card_list' => $goods_card_list,
     'card_list' => $card_list,
     'goods_cat_list' => $goods_cat_list,
@@ -979,12 +901,16 @@ if (!$returnUrl) {
         enableContextMenu: false,
         autoHeightEnabled: false,
     });
-    $(document).on("change", ".cat-item input", function () {
+    $(document).on("click", ".cat-item input", function () {
+        
         if ($(this).prop("checked")) {
-            $(".cat-item").removeClass("active");
-            $(this).parent(".cat-item").addClass("active");
+            
+            // $(".cat-item").removeClass("active");
+            $(this).parents().addClass("active");
+            $(this).attr('checked','checked');
         } else {
             $(this).parent(".cat-item").removeClass("active");
+            $(this).removeAttr('checked');
         }
     });
 
@@ -993,9 +919,9 @@ if (!$returnUrl) {
     });
 
     //分类设置
-    // $(document).on('click', '.cat-modal', function () {
-    //     page.select_i = $(this).data('index');
-    // });
+    $(document).on('click', '.addcat', function () {
+        page.select_i = $(this).data('index');
+    });
     //选择分类
     $(document).on("change", ".parents", function () {
         var parent_id=$(this).val();
@@ -1027,15 +953,29 @@ if (!$returnUrl) {
         $('.son option:first').attr('selected','selected');
     });
     //选择分类
-    // $(document).on("click", ".cat-confirm", function () {
-    //     var cat_name = $.trim($(".cat-item.active").text());
-    //     var cat_id = $(".cat-item.active input").val();
-    //     if (cat_name && cat_id) {
-    //         page.goods_cat_list[page.select_i]['cat_id'] = cat_id;
-    //         page.goods_cat_list[page.select_i]['cat_name'] = cat_name;
-    //     }
-    //     $("#catModal").modal("hide");
-    // });
+    $(document).on("click", ".cat-confirm", function () {
+        
+        // var cat_id = new Array();
+        // $(".cat-item.active input").each(function(i){
+        //     cat_id[i] = $(this).val();
+        // });
+        
+
+        var cat_name = new Array();
+        $(".cat-item.active").each(function(i){
+            cat_name[i] = $.trim($(this).text());
+        });
+        var cat_name_vals = cat_name.join(",");
+        $("#service_name_arr").val(cat_name_vals);
+        var html='';
+        $(".service").empty()
+        for (var i = 0; i < cat_name.length; i++) {
+            html+='<span class="input-group-addon-service">'+cat_name[i]+'<span class="delelt-span">×</span></span>';
+        }
+        html+='<a class="select-service addcat" data-toggle="modal" data-target="#catModal" style="color: #0275d8;">选择</a>';
+        $(".service").html(html)
+        $("#catModal").modal("hide");
+    });
     //添加新分类
     // $(document).on('click', '.addcat', function () {
     //     var cat = {};

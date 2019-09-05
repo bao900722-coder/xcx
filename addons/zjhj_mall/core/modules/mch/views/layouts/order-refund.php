@@ -101,6 +101,14 @@ $urlHandle = $urlManager->createUrl(['mch/order/refund-handle']);
                                   style="width: 100%;"></textarea>
                     </div>
                 </div>
+                <div class="form-group row">
+                    <label class="col-4 text-right col-form-label" style='text-align: left!important;'>备注：</label>
+                    <div class="col-11" style="margin-left: 1rem;">
+                        <textarea id="order_exchange_remark" name="seller_comments" cols="90"
+                                  rows="3"
+                                  style="width: 100%;"></textarea>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>

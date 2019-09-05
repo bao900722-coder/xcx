@@ -59,6 +59,7 @@ class GoodsSearchForm extends MchModel
                 'more' => 0,
             ];
         }
+
         $goodsCardList = Goods::getGoodsCard($goods->id);
         $goodsCatList = Goods::getCatList($goods);
         foreach ($goods as $index => $value) {
@@ -70,7 +71,6 @@ class GoodsSearchForm extends MchModel
             }
             $goods[$index] = str_replace("\"", "&quot;", $value);
         }
-
         return [
             'goods' => $goods,
             'cat_list' => $catList,

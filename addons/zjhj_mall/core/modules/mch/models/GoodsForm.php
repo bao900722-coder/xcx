@@ -69,6 +69,8 @@ class GoodsForm extends MchModel
     public $single_share_commission_second;
     public $single_share_commission_third;
 
+    public $intro;
+    public $marketing;
 
     /**
      * @return array
@@ -78,9 +80,9 @@ class GoodsForm extends MchModel
         return [
             [['name', 'service', 'unit', 'goods_no'], 'trim'],
             [['store_id', 'name', 'price', 'cat_id', 'detail', 'goods_pic_list', 'cover_pic', 'attr_setting_type'], 'required'],
-            [['store_id', 'share_type', 'quick_purchase', 'hot_cakes', 'is_level', 'is_negotiable'], 'integer'],
+            [['store_id', 'share_type', 'quick_purchase', 'hot_cakes', 'is_level', 'is_negotiable', 'marketing'], 'integer'],
             [['price', 'original_price'], 'number', 'min' => 0.01, 'max' => 99999999],
-            [['detail', 'service', 'cover_pic', 'video_url', 'goods_no'], 'string'],
+            [['detail', 'intro', 'service', 'cover_pic', 'video_url', 'goods_no'], 'string'],
             [['name', 'goods_no', 'unit'], 'string', 'max' => 255],
             [['sort'], 'default', 'value' => 1000],
             [['attr', 'individual_share', 'full_cut', 'integral', 'goods_card'], 'safe',],
@@ -103,6 +105,7 @@ class GoodsForm extends MchModel
             'name' => '商品名称',
             'price' => '售价',
             'original_price' => '原价（只做显示用）',
+            'intro'=>'商品简介',
             'detail' => '图文详情',
             'cat_id' => '商品分类',
             'status' => '上架状态：0=下架，1=上架',
@@ -131,6 +134,7 @@ class GoodsForm extends MchModel
             'single_share_commission_first' => '一级佣金',
             'single_share_commission_second' => '二级佣金',
             'single_share_commission_third' => '三级佣金',
+            'marketing'=>'营销类型',
         ];
     }
 
@@ -313,6 +317,10 @@ class GoodsForm extends MchModel
             if ($goods->type === 5) {
                 $goods->is_level = 0;
             }
+
+            $goods->intro = $this->intro;//商品简介
+            $goods->marketing = $this->marketing;//商品营销类型
+
             if ($goods->save()) {
                 //多分类设置
                 GoodsCat::updateAll(['is_delete' => 1], ['goods_id' => $goods->id]);
