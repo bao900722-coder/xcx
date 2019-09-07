@@ -854,6 +854,18 @@ class Menu
                 'icon' => 'icon-coupons',
                 'children' => [
                     [
+                        'name' => '意见反馈列表',
+                        'is_menu' => true,
+                        'route' => 'mch/feedback/index',
+                        'sub' => [
+                            [
+                                'name' => '意见反馈详情',
+                                'is_menu' => false,
+                                'route' => 'mch/feedback/detail',
+                            ],
+                        ],
+                    ],
+                    [
                         'key' => 'coupon',
                         'name' => '优惠券',
                         'is_menu' => true,
