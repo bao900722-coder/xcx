@@ -1901,6 +1901,37 @@ class Menu
                     ],
                     [
                         'is_menu' => true,
+                        'name' => '配送员管理',
+                        'route' => 'mch/permission/distributor/index',
+                        'sub' => [
+                            [
+                                'is_menu' => false,
+                                'name' => '添加配送员',
+                                'route' => 'mch/permission/distributor/create',
+                            ],
+                            [
+                                'is_menu' => false,
+                                'name' => '编辑配送员',
+                                'route' => 'mch/permission/distributor/edit',
+                            ],
+                        ],
+                        'action' => [
+                            [
+                                'name' => '配送员(U)',
+                                'route' => 'mch/permission/distributor/update',
+                            ],
+                            [
+                                'name' => '配送员删除',
+                                'route' => 'mch/permission/distributor/destroy',
+                            ],
+                            [
+                                'name' => '配送员(S)',
+                                'route' => 'mch/permission/distributor/store',
+                            ],
+                        ]
+                    ],
+                    [
+                        'is_menu' => true,
                         'name' => '操作日志',
                         'route' => 'mch/action-log/index',
                         'sub' => [

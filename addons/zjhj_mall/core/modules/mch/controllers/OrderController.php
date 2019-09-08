@@ -290,10 +290,20 @@ class OrderController extends Controller
         $form->store_id = $this->store->id;
         $form->order_refund_id = $refund_id;
         $arr = $form->search();
-        // print_r($arr);die;
-        // $arr['is_update'] = true;
-
-        return $this->render('refund-detail', $arr);
+        $address = RefundAddress::find()->where(['store_id' => $this->store->id, 'is_delete' => 0])->all();
+        foreach ($address as &$v) {
+            if (mb_strlen($v->address) > 20) {
+                $v->address = mb_substr($v->address, 0, 20) . '···';
+            }
+        }
+        unset($v);
+        $list=array(
+            'list'=>$arr['list'],
+            'goods_list'=>$arr['goods_list'],
+            'address'=>$address,
+        );
+        // print_r($arr['list']);die;
+        return $this->render('refund-detail', $list);
     }
     public function actionOffline()
     {
@@ -441,8 +451,10 @@ class OrderController extends Controller
     public function actionRefundHandle()
     {
         $form = new OrderRefundForm();
+        // print_r(\Yii::$app->request->post());die;
         $form->attributes = \Yii::$app->request->post();
         $form->store_id = $this->store->id;
+        // var_dump($form->save());die;
         return $form->save();
     }
 

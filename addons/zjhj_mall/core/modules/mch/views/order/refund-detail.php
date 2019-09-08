@@ -166,7 +166,8 @@ $urlStr = get_plugin_url();
                                     <?php endif; ?>
                                 </td>
                             </tr>
-                            <?php if ($list['refund_status'] == 0) : ?>
+
+                            <?php if ($list['is_agree'] == 1 && $list['refund_status']==1) : ?>
                                 <table class="table table-bordered" style="border: none;">
                                     <tr>
                                         <td colspan="2" style="border: none;"></td>
@@ -178,31 +179,31 @@ $urlStr = get_plugin_url();
                                     </tr>
                                     <tr>
                                         <td style="border: none;">退款金额：</td>
-                                        <td style="border: none;">0.5元</td>
+                                        <td style="border: none;"><?= $list['refund_price'] ?>元</td>
                                         <!-- <td><?= $list['pay_price'] ?>元</td> -->
                                     </tr>
                                     <tr>
                                         <td style="border: none;">备注：</td>
-                                        <td style="border: none;">跟客户电话协商最终退款退货，已安排配送员取回，客户地址海南省海口市美兰区鹏晖国际大厦3层</td>
+                                        <td style="border: none;"><?= $list['refuse_desc'] ?></td>
                                         <!-- <td><?= $list['pay_price'] ?>元</td> -->
                                     </tr>
                                 </table>
-                            <?php elseif ($list['refund_status'] == 1) : ?>
-                            <table class="table table-bordered" style="border: none;">
-                                <tr>
-                                    <td colspan="2" style="border: none;"></td>
-                                </tr>
-                                <tr>
-                                    <td style="border: none;">处理结果：</td>
-                                    <td style="border: none;">拒绝退款</td>
-                                    <!-- <td><?= $list['pay_price'] ?>元</td> -->
-                                </tr>
-                                <tr>
-                                    <td style="border: none;">备注：</td>
-                                    <td style="border: none;">跟客户电话协商最终退款退货，已安排配送员取回，客户地址海南省海口市美兰区鹏晖国际大厦3层</td>
-                                    <!-- <td><?= $list['pay_price'] ?>元</td> -->
-                                </tr>
-                            </table> 
+                            <?php elseif ($list['is_agree'] == 2 && $list['refund_status'] == 3) : ?>
+                                <table class="table table-bordered" style="border: none;">
+                                    <tr>
+                                        <td colspan="2" style="border: none;"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: none;">处理结果：</td>
+                                        <td style="border: none;">拒绝退款</td>
+                                        <!-- <td><?= $list['pay_price'] ?>元</td> -->
+                                    </tr>
+                                    <tr>
+                                        <td style="border: none;">备注：</td>
+                                        <td style="border: none;"><?= $list['refuse_desc'] ?></td>
+                                        <!-- <td><?= $list['pay_price'] ?>元</td> -->
+                                    </tr>
+                                </table> 
                             <?php endif; ?>
                         </table>
                     </div>
@@ -271,8 +272,34 @@ $urlStr = get_plugin_url();
             
         </div>
     </div>
+    <!-- 添加按钮开始 -->
+    <div style="margin-left: 0;" class="form-group row text-center">
+        <div style="margin:0 auto; height: 5rem;">
 
+            <!-- <a class="btn btn-primary auto-form-btn" href="javascript:" data-toggle="modal" data-target="#retreatModal"
+                                               onclick="refund_retreat(<?= $list['order_refund_id'] ?>,<?= $list['refund_price'] ?>)"
+                                               data-id="<?= $list['order_refund_id'] ?>"
+                                               data-price="<?= $list['refund_price'] ?>">同意退款</a>
+            <a class="btn btn-primary auto-form-btn disagree-btn-1" onclick="refund_refuse(<?= $list['order_refund_id'] ?>)" data-id="<?= $order_item['order_refund_id'] ?>" href="javascript:" style="margin-left: 1.5rem">拒绝退款</a> -->
+            <?php if ($list['refund_status'] == 0) : ?>
+                <a class="btn btn-primary auto-form-btn" href="javascript:" data-toggle="modal" data-target="#retreatModal"
+                                               onclick="refund_retreat(<?= $list['order_refund_id'] ?>,<?= $list['refund_price'] ?>)"
+                                               data-id="<?= $list['order_refund_id'] ?>"
+                                               data-price="<?= $list['refund_price'] ?>">同意退款</a>
+                <a class="btn btn-primary auto-form-btn disagree-btn-1" onclick="refund_refuse(<?= $list['order_refund_id'] ?>)" data-id="<?= $order_item['order_refund_id'] ?>" href="javascript:" style="margin-left: 1.5rem">拒绝退款</a>
+            <?php elseif ($list['refund_status'] == 1) : ?>
+            <?php elseif ($list['refund_status'] == 2) : ?>
+            <?php endif; ?>
+            <input type="button" class="btn btn-default ml-4"
+                   name="Submit" onclick="javascript:history.back(-1);" value="返回">
+        </div>
+    </div>
+    <!-- 添加按钮结束 -->
 </div>
+
+<?= $this->render('/layouts/order-refund', [
+    'orderType' => 'STORE'
+]) ?>
 <script>
     $('.btn-success').on('click', function () {
         var seller_comments = $("#seller_comments").val();
