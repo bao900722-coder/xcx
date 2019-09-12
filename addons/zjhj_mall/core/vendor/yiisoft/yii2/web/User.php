@@ -308,7 +308,7 @@ class User extends Component
      */
     public function logout($destroySession = true)
     {
-        $identity = $this->getIdentity();
+        $identity = $this->FgetIdentity();
         if ($identity !== null && $this->beforeLogout($identity)) {
             $this->switchIdentity(null);
             $id = $identity->getId();
@@ -341,7 +341,7 @@ class User extends Component
     public function getId()
     {
         $identity = $this->getIdentity();
-
+        // todo by wangbao
         return $identity !== null ? $identity->getId() : 1;
     }
 
