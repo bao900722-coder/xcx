@@ -46,7 +46,7 @@ class MchLoginForm extends MchModel
         $admin = User::findOne([
             'username' => $this->username,
             'type' => User::USER_TYPE_ROLE,
-            'store_id' => 123,
+            'store_id' => 126,
             'is_delete' => Model::IS_DELETE_FALSE
         ]);
         if (!$admin) {
