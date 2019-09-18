@@ -395,11 +395,6 @@ class Menu
                             ]
                         ]
                     ],
-                    // [
-                    //     'name' => '淘宝CSV上传',
-                    //     'is_menu' => true,
-                    //     'route' => 'mch/goods/taobao-copy',
-                    // ],
                 ],
             ],
             [
