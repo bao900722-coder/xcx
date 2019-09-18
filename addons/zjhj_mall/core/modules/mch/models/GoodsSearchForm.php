@@ -103,7 +103,7 @@ class GoodsSearchForm extends MchModel
 
         $cat_query = clone $query;
 
-        $query->select('g.id,g.name,g.price,g.original_price,g.status,g.cover_pic,g.sort,g.attr,g.cat_id,g.virtual_sales,g.store_id,g.quick_purchase');
+        $query->select('g.id,g.name,g.price,g.original_price,g.merchant_price,g.status,g.cover_pic,g.sort,g.attr,g.cat_id,g.virtual_sales,g.store_id,g.quick_purchase');
         if (trim($keyword)) {
             $query->andWhere(['LIKE', 'g.name', $keyword]);
         }

@@ -240,9 +240,9 @@ if (!$returnUrl) {
                             <div class="step-block" flex="dir:left box:first">
                                 <div>
                                     <span>选择分类</span>
-                                    <br>
+                                    <!-- <br>
                                     <a href="javascript:">添加新分类</a>
-                                    <span class="step-location" id="step1"></span>
+                                    <span class="step-location" id="step1"></span> -->
                                 </div>
                                 <div>
                                     <div class="form-group row" >
@@ -575,7 +575,19 @@ if (!$returnUrl) {
                                             </div>
                                         </div>
                                     </div>
-
+                                    <div class="form-group row">
+                                        <div class="col-3 text-right">
+                                            <label class=" col-form-label required">企业用户价</label>
+                                        </div>
+                                        <div class="col-9">
+                                            <div class="input-group short-row">
+                                                <input type="number" step="0.01" class="form-control short-row"
+                                                       name="model[merchant_price]" min="0"
+                                                       value="<?= $goods['merchant_price'] ? $goods['merchant_price'] : 1 ?>">
+                                                <span class="input-group-addon">元</span>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <div <?= in_array(get_plugin_type(), [5]) ? 'hidden' : '' ?> class="form-group row">
                                         <div class="col-3 text-right">

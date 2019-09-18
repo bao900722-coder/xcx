@@ -28,6 +28,7 @@ class GoodsForm extends MchModel
     public $cat_id;
     public $price;
     public $original_price;
+    public $merchant_price;
     public $service;
     public $detail;
     public $sort;
@@ -81,7 +82,7 @@ class GoodsForm extends MchModel
             [['name', 'service', 'unit', 'goods_no'], 'trim'],
             [['store_id', 'name', 'price', 'cat_id', 'detail', 'goods_pic_list', 'cover_pic', 'attr_setting_type'], 'required'],
             [['store_id', 'share_type', 'quick_purchase', 'hot_cakes', 'is_level', 'is_negotiable', 'marketing'], 'integer'],
-            [['price', 'original_price'], 'number', 'min' => 0.01, 'max' => 99999999],
+            [['price', 'original_price', 'merchant_price'], 'number', 'min' => 0.01, 'max' => 99999999],
             [['detail', 'intro', 'service', 'cover_pic', 'video_url', 'goods_no'], 'string'],
             [['name', 'goods_no', 'unit'], 'string', 'max' => 255],
             [['sort'], 'default', 'value' => 1000],
@@ -105,6 +106,7 @@ class GoodsForm extends MchModel
             'name' => '商品名称',
             'price' => '售价',
             'original_price' => '原价（只做显示用）',
+            'merchant_price' => '商家用户价',
             'intro'=>'商品简介',
             'detail' => '图文详情',
             'cat_id' => '商品分类',
@@ -218,7 +220,15 @@ class GoodsForm extends MchModel
                     'msg' => '商品原价超过限制',
                 ];
             }
-
+            if (!$this->merchant_price) {
+                $this->merchant_price = $this->price;
+            }
+            if ($this->merchant_price > 99999999.99) {
+                return [
+                    'code' => 1,
+                    'msg' => '商家用户价超过限制',
+                ];
+            }
             if (!$this->cost_price) {
                 $this->cost_price = $this->price;
             }
