@@ -191,7 +191,7 @@ class GoodsController extends Controller
         }
 
         $goods_cat_son_list = Cat::find()->select('id,name')->where(['is_delete' => 0, 'parent_id'=>$list['goods_cat_list'][0]['cat_id'], 'store_id' => $this->store->id])->orderBy(['sort'=>SORT_ASC])->asArray()->all();
-        
+        // print_r($list['goods_cat_list']);die;
         return $this->render('goods-edit', [
             'goods' => $list['goods'],
             'service_arr' => $service_arr,
@@ -201,7 +201,7 @@ class GoodsController extends Controller
             'postageRiles' => $list['postageRiles'],
             'card_list' => \Yii::$app->serializer->encode($list['card_list']),
             'goods_card_list' => \Yii::$app->serializer->encode($list['goods_card_list']),
-            'goods_cat_list' => $list['goods_cat_list'],
+            'goods_cat_list' => \Yii::$app->serializer->encode($list['goods_cat_list']),
             'goods_cat_son_list' => $goods_cat_son_list,
             'plugins' => $plugins
         ]);

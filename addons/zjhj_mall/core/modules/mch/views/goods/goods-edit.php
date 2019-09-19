@@ -240,12 +240,12 @@ if (!$returnUrl) {
                             <div class="step-block" flex="dir:left box:first">
                                 <div>
                                     <span>选择分类</span>
-                                    <!-- <br>
-                                    <a href="javascript:">添加新分类</a>
-                                    <span class="step-location" id="step1"></span> -->
+                                    <br>
+                                    <a class="addcat" href="javascript:">添加新分类</a>
+                                    <span class="step-location" id="step1"></span>
                                 </div>
                                 <div>
-                                    <div class="form-group row" >
+                                    <!-- <div class="form-group row" >
                                         <div class="col-3 text-right">
                                             <label class=" col-form-label required">商品分类</label>
                                         </div>
@@ -322,8 +322,26 @@ if (!$returnUrl) {
                                                 </div>
                                             <?php endif; ?>
                                         </div>
+                                    </div> -->
+                                    <div class="form-group row" v-for="(item,i) in goods_cat_list">
+                                        <div class="col-3 text-right">
+                                            <label class=" col-form-label required">商品分类</label>
+                                        </div>
+                                        <div class="col-9">
+                                            <div class="input-group short-row">
+                                                <input readonly class="form-control cat-name" v-model="item.cat_name">
+                                                <input type="hidden" name="model[cat_id][]" class="form-control cat-id"
+                                                       v-model="item.cat_id">
+                                                <span class="input-group-btn">
+                                                    <a class="btn btn-secondary cat-modal" href="javascript:" data-toggle="modal"
+                                                        data-target="#catModal" :data-index="i">选择分类</a>
+                                                </span>
+                                                <span class="input-group-btn">
+                                                    <a class="btn btn-danger delete-cat" href="javascript:" :data-index="i">删除</a>
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    
                                 </div>
                             </div>
 
@@ -823,7 +841,7 @@ if (!$returnUrl) {
         </form>
 
         <!-- 选择分类 -->
-        <div class="modal fade" id="catModal" tabindex="-1" role="dialog"
+        <!-- <div class="modal fade" id="catModal" tabindex="-1" role="dialog"
              aria-labelledby="catModalLabel"
              aria-hidden="true">
             <div class="modal-dialog" role="document" style="margin-top: 30rem">
@@ -846,6 +864,52 @@ if (!$returnUrl) {
                                                name="model[cat_id]">
                                     </label>
                                 <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary cat-confirm">确认</button>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <div class="modal fade" id="catModal" tabindex="-1" role="dialog"
+             aria-labelledby="catModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <b>选择分类</b>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="cat-box">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="cat-list parent-cat-list">
+                                        <?php foreach ($cat_list as $index => $cat) : ?>
+                                            <label class="cat-item <?= $index == 0 ? 'active' : '' ?>">
+                                                <?= $cat->name ?>
+                                                <input value="<?= $cat->id ?>"
+                                                    <?= $index == 0 ? 'checked' : '' ?>
+                                                       type="radio"
+                                                       name="model[cat_id]">
+                                            </label>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="cat-list">
+                                        <label class="cat-item" v-for="sub_cat in sub_cat_list">
+                                            {{sub_cat.name}}
+                                            <input v-bind:value="sub_cat.id" type="radio"
+                                                   name="model[cat_id]">
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -913,16 +977,24 @@ if (!$returnUrl) {
         enableContextMenu: false,
         autoHeightEnabled: false,
     });
-    $(document).on("click", ".cat-item input", function () {
+    // $(document).on("click", ".cat-item input", function () {
         
-        if ($(this).prop("checked")) {
+    //     if ($(this).prop("checked")) {
             
-            // $(".cat-item").removeClass("active");
-            $(this).parents().addClass("active");
-            $(this).attr('checked','checked');
+    //         // $(".cat-item").removeClass("active");
+    //         $(this).parents().addClass("active");
+    //         $(this).attr('checked','checked');
+    //     } else {
+    //         $(this).parent(".cat-item").removeClass("active");
+    //         $(this).removeAttr('checked');
+    //     }
+    // });
+    $(document).on("change", ".cat-item input", function () {
+        if ($(this).prop("checked")) {
+            $(".cat-item").removeClass("active");
+            $(this).parent(".cat-item").addClass("active");
         } else {
             $(this).parent(".cat-item").removeClass("active");
-            $(this).removeAttr('checked');
         }
     });
 
@@ -931,63 +1003,95 @@ if (!$returnUrl) {
     });
 
     //分类设置
-    $(document).on('click', '.addcat', function () {
+    // $(document).on('click', '.addcat', function () {
+    //     page.select_i = $(this).data('index');
+    // });
+    //选择分类
+    // $(document).on("change", ".parents", function () {
+    //     var parent_id=$(this).val();
+    //     var html='<option value="0"></option>';
+    //     $.ajax({
+    //         url: "<?=$urlManager->createUrl(['mch/goods/get-cat-list'])?>",
+    //         data: {
+    //             parent_id: parent_id,
+    //         },
+    //         success: function (res) {
+    //             console.log(res);
+    //             if (res.code == 0) {
+    //                 $(".son").empty()
+    //                 for (var i = 0; i < res.data.length; i++) {
+    //                     html+='<option value="'+res.data[i].id+'">'+res.data[i].name+'</option>';
+    //                 }
+    //                 $(".son").html(html)
+    //             }
+    //         }
+    //     });
+    // });
+    //分类设置
+    $(document).on('click', '.cat-modal', function () {
         page.select_i = $(this).data('index');
     });
     //选择分类
-    $(document).on("change", ".parents", function () {
-        var parent_id=$(this).val();
-        var html='<option value="0"></option>';
-        $.ajax({
-            url: "<?=$urlManager->createUrl(['mch/goods/get-cat-list'])?>",
-            data: {
-                parent_id: parent_id,
-            },
-            success: function (res) {
-                console.log(res);
-                if (res.code == 0) {
-                    $(".son").empty()
-                    for (var i = 0; i < res.data.length; i++) {
-                        html+='<option value="'+res.data[i].id+'">'+res.data[i].name+'</option>';
-                    }
-                    $(".son").html(html)
-                }
-            }
-        });
-    });
-    //删除父分类
-    $(document).on("click", ".delete-cat-parents", function () {
-        $('.parents option:first').attr('selected','selected');
-        $('.son option:first').attr('selected','selected');
-    });
-    //删除子分类
-    $(document).on("click", ".delete-cat-son", function () {
-        $('.son option:first').attr('selected','selected');
-    });
-    //选择分类
     $(document).on("click", ".cat-confirm", function () {
-        
-        // var cat_id = new Array();
-        // $(".cat-item.active input").each(function(i){
-        //     cat_id[i] = $(this).val();
-        // });
-        
-
-        var cat_name = new Array();
-        $(".cat-item.active").each(function(i){
-            cat_name[i] = $.trim($(this).text());
-        });
-        var cat_name_vals = cat_name.join(",");
-        $("#service_name_arr").val(cat_name_vals);
-        var html='';
-        $(".service").empty()
-        for (var i = 0; i < cat_name.length; i++) {
-            html+='<span class="input-group-addon-service">'+cat_name[i]+'<span class="delelt-span">×</span></span>';
+        var cat_name = $.trim($(".cat-item.active").text());
+        var cat_id = $(".cat-item.active input").val();
+        if (cat_name && cat_id) {
+            page.goods_cat_list[page.select_i]['cat_id'] = cat_id;
+            page.goods_cat_list[page.select_i]['cat_name'] = cat_name;
         }
-        html+='<a class="select-service addcat" data-toggle="modal" data-target="#catModal" style="color: #0275d8;">选择</a>';
-        $(".service").html(html)
         $("#catModal").modal("hide");
     });
+    //删除父分类
+    // $(document).on("click", ".delete-cat-parents", function () {
+    //     $('.parents option:first').attr('selected','selected');
+    //     $('.son option:first').attr('selected','selected');
+    // });
+    // //删除子分类
+    // $(document).on("click", ".delete-cat-son", function () {
+    //     $('.son option:first').attr('selected','selected');
+    // });
+    //添加新分类
+    $(document).on('click', '.addcat', function () {
+        var cat = {};
+        cat.cat_name = '';
+        cat.cat_id = '';
+        page.goods_cat_list.push(cat);
+    });
+    //删除分类
+    $(document).on('click', '.delete-cat', function () {
+        page.goods_cat_list.splice($(this).data('index'), 1);
+        if (page.goods_cat_list.length == 0) {
+            var cat = {};
+            cat.cat_name = '';
+            cat.cat_id = '';
+            page.goods_cat_list.push(cat);
+        }
+    });
+    
+    //选择分类
+    // $(document).on("click", ".cat-confirm", function () {
+        
+    //     // var cat_id = new Array();
+    //     // $(".cat-item.active input").each(function(i){
+    //     //     cat_id[i] = $(this).val();
+    //     // });
+        
+
+    //     var cat_name = new Array();
+    //     $(".cat-item.active").each(function(i){
+    //         cat_name[i] = $.trim($(this).text());
+    //     });
+    //     var cat_name_vals = cat_name.join(",");
+    //     $("#service_name_arr").val(cat_name_vals);
+    //     var html='';
+    //     $(".service").empty()
+    //     for (var i = 0; i < cat_name.length; i++) {
+    //         html+='<span class="input-group-addon-service">'+cat_name[i]+'<span class="delelt-span">×</span></span>';
+    //     }
+    //     html+='<a class="select-service addcat" data-toggle="modal" data-target="#catModal" style="color: #0275d8;">选择</a>';
+    //     $(".service").html(html)
+    //     $("#catModal").modal("hide");
+    // });
     //添加新分类
     // $(document).on('click', '.addcat', function () {
     //     var cat = {};
