@@ -114,7 +114,7 @@ class OrderSubmitForm extends OrderData
             $address = Address::findOne([
                 'id' => $this->address_id,
                 'store_id' => $this->store_id,
-                'user_id' => $this->user_id,
+                //'user_id' => $this->user_id,
             ]);
 
             if (!$address) {
