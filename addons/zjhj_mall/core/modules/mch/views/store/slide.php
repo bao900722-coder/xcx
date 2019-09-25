@@ -72,9 +72,9 @@ $this->params['active_nav_group'] = 1;
                         <a class="btn btn-sm btn-danger del"
                            href="<?= $urlManager->createUrl(['mch/store/slide-del', 'id' => $value['id']]) ?>">删除</a>
                         <?php if ($value['is_show'] === '1') :?>
-                            <a class="btn btn-sm btn-primary is_show" onclick="upDown(<?= $value['id'] ?>,2);">不显示</a>
+                            <a class="btn btn-sm btn-primary is_show" style="color: #fff" onclick="upDown(<?= $value['id'] ?>,2);">不显示</a>
                         <?php elseif ($value['is_show'] === '2') :?>
-                            <a class="btn btn-sm btn-primary is_show" onclick="upDown(<?= $value['id'] ?>,1);">显示</a>
+                            <a class="btn btn-sm btn-primary is_show" style="color: #fff" onclick="upDown(<?= $value['id'] ?>,1);">显示</a>
                         <?php endif; ?>
                         
                     </td>
