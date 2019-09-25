@@ -181,7 +181,14 @@ class GoodsController extends Controller
                 $service_name[]=$val['name'];
             }
             $goods['service']=implode(',',$service_name);
-        }   
+        }else{
+            $service=explode(',',$goods['service']);
+            foreach ($service as $val) {
+                $service_arr[]=array(
+                    'name'=>$val,
+                );
+            }
+        }
 
         $option_arr = Option::get('good_services', $this->store->id, 'admin', []);
         

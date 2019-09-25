@@ -371,6 +371,14 @@ class StoreController extends Controller
         $form = new BannerForm();
         $form->type = 1;
         $arr = $form->getList($store);
+        // print_r($arr);die;
+        foreach ($arr[0] as $key => $val) {
+            if($val['is_show']==1){
+                $arr[0][$key]['is_show_name']="显示";
+            }else if($val['is_show']==2){
+                $arr[0][$key]['is_show_name']="不显示";
+            }
+        }
         return $this->render('slide', [
             'list' => $arr[0],
             'pagination' => $arr[1],
@@ -389,6 +397,26 @@ class StoreController extends Controller
         $form = new BannerForm();
         if (\Yii::$app->request->isPost) {
             $model = \Yii::$app->request->post('model');
+
+            if($model['title']==''){
+                return [
+                    'code' => 1,
+                    'msg' => '请输入标题',
+                ];
+            }
+            if($model['sort']==''){
+                return [
+                    'code' => 1,
+                    'msg' => '请输入排序',
+                ];
+            }
+            if(!preg_match("/^[1-9][0-9]*$/",$model['sort'])){
+                return [
+                    'code' => 1,
+                    'msg' => '排序必须是正整数！',
+                ];
+            }
+
             $model['store_id'] = $this->store->id;
             $form->attributes = $model;
             $form->banner = $banner;
@@ -429,6 +457,36 @@ class StoreController extends Controller
                 ];
             }
         }
+    }
+    /**
+     * 幻灯片修改状态
+     * @param int $id
+     */
+    public function actionSlideUpdate($id = 0, $is_show = 1)
+    {
+        
+        $dishes = Banner::findOne(['id' => $id, 'is_delete' => 0]);
+        if (!$dishes) {
+            return [
+                'code' => 1,
+                'msg' => '幻灯片不存在或已经删除',
+            ];
+        }
+        $dishes->is_show = $is_show;
+        if ($dishes->save()) {
+            return [
+                'code' => 0,
+                'msg' => '成功',
+            ];
+        } else {
+            foreach ($dishes->errors as $errors) {
+                return [
+                    'code' => 1,
+                    'msg' => $errors[0],
+                ];
+            }
+        }
+        
     }
 
     /**

@@ -198,6 +198,16 @@ if (!$returnUrl) {
         padding: .35rem .7rem;
 
     }
+    .cat-box .cat-item1 .active {
+        background: rgb(2, 117, 216);
+        color: #fff;
+    }
+    .cat-box .cat-item1 {
+        border-bottom: 1px solid rgba(0, 0, 0, .1);
+        padding: .5rem 1rem;
+        display: block;
+        margin: 0;
+    }
     .delelt-span{
         padding-left: 0.8rem;
     }
@@ -613,12 +623,12 @@ if (!$returnUrl) {
                                         </div>
                                         <div class="col-9">
                                             
-                                            <div class="input-group short-row service">
+                                            <div class="input-group short-row service1">
                                                 <?php foreach ($service_arr as $p) : ?>
                                                 <span class="input-group-addon-service"><?= $p['name'] ?><span class="delelt-span">×</span></span>
                                                 <?php endforeach; ?>
-                                                <a class="select-service addcat" data-toggle="modal"
-                                                        data-target="#catModal" style="color: #0275d8;">选择</a>
+                                                <a class="select-service addcat1" data-toggle="modal"
+                                                        data-target="#catModal1" style="color: #0275d8;">选择</a>
                                             </div>
                                             
                                         </div>
@@ -699,7 +709,7 @@ if (!$returnUrl) {
                             ]) ?>
 
 
-                            <div <?= in_array(get_plugin_type(), [5]) ? 'hidden' : '' ?> class="step-block" flex="dir:left box:first">
+                            <!-- <div <?= in_array(get_plugin_type(), [5]) ? 'hidden' : '' ?> class="step-block" flex="dir:left box:first">
                                 <div>
                                     <span>营销</span>
                                     <span class="step-location" id="step6"></span>
@@ -779,7 +789,7 @@ if (!$returnUrl) {
                                         </div>
                                     <?php endif; ?>
                                 </div>
-                            </div>
+                            </div> -->
                             <!--额外设置-->
                             <div class="step-block" flex="dir:left box:first">
                                 <?php foreach ($plugins as $plugin) : ?>
@@ -832,7 +842,7 @@ if (!$returnUrl) {
                     ]) ?>
                 </div>
             </div>
-            <input name="model[service_name_arr]" id="service_name_arr" type="hidden" value="<?= $goods['service'] ?>">
+            <input name="model[service]" id="service_name_arr" type="hidden" value="<?= $goods['service'] ?>">
             <div style="margin-left: 0;" class="form-group row text-center">
                 <a class="btn btn-primary auto-form-btn" href="javascript:">保存</a>
                 <input type="button" class="btn btn-default ml-4"
@@ -841,13 +851,13 @@ if (!$returnUrl) {
         </form>
 
         <!-- 选择分类 -->
-        <!-- <div class="modal fade" id="catModal" tabindex="-1" role="dialog"
+        <div class="modal fade" id="catModal1" tabindex="-1" role="dialog"
              aria-labelledby="catModalLabel"
              aria-hidden="true">
             <div class="modal-dialog" role="document" style="margin-top: 30rem">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <b>选择分类</b>
+                        <b>选择服务内容</b>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -856,7 +866,7 @@ if (!$returnUrl) {
                         <div class="cat-box">
                             <div class="row" style="height: 9rem;">
                                 <?php foreach ($option_arr as $index => $cat) : ?>
-                                    <label class="input-group-addon-service cat-item <?= $index == 0 ? 'active' : '' ?>" style="height: 2.5rem;margin-left: 0.5rem;margin-top: 0.5rem;">
+                                    <label class="input-group-addon-service cat-item select-service <?= $index == 0 ? 'active' : '' ?>" style="height: 2.5rem;margin-left: 0.5rem;margin-top: 0.5rem;">
                                         <?= $cat['service'] ?>
                                         <input value="<?= $cat['id'] ?>"
                                             <?= $index == 0 ? 'checked' : '' ?>
@@ -869,11 +879,11 @@ if (!$returnUrl) {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
-                        <button type="button" class="btn btn-primary cat-confirm">确认</button>
+                        <button type="button" class="btn btn-primary cat-confirm1">确认</button>
                     </div>
                 </div>
             </div>
-        </div> -->
+        </div>
         <div class="modal fade" id="catModal" tabindex="-1" role="dialog"
              aria-labelledby="catModalLabel"
              aria-hidden="true">
@@ -891,7 +901,7 @@ if (!$returnUrl) {
                                 <div class="col-6">
                                     <div class="cat-list parent-cat-list">
                                         <?php foreach ($cat_list as $index => $cat) : ?>
-                                            <label class="cat-item <?= $index == 0 ? 'active' : '' ?>">
+                                            <label class="cat-item select-cat <?= $index == 0 ? 'active' : '' ?>">
                                                 <?= $cat->name ?>
                                                 <input value="<?= $cat->id ?>"
                                                     <?= $index == 0 ? 'checked' : '' ?>
@@ -903,7 +913,7 @@ if (!$returnUrl) {
                                 </div>
                                 <div class="col-6">
                                     <div class="cat-list">
-                                        <label class="cat-item" v-for="sub_cat in sub_cat_list">
+                                        <label class="cat-item select-cat" v-for="sub_cat in sub_cat_list">
                                             {{sub_cat.name}}
                                             <input v-bind:value="sub_cat.id" type="radio"
                                                    name="model[cat_id]">
@@ -989,23 +999,35 @@ if (!$returnUrl) {
     //         $(this).removeAttr('checked');
     //     }
     // });
-    $(document).on("change", ".cat-item input", function () {
+    $(document).on("change", ".select-cat input", function () {
         if ($(this).prop("checked")) {
-            $(".cat-item").removeClass("active");
-            $(this).parent(".cat-item").addClass("active");
+            $(".select-cat").removeClass("active");
+            $(this).parent(".select-cat").addClass("active");
         } else {
-            $(this).parent(".cat-item").removeClass("active");
+            $(this).parent(".select-cat").removeClass("active");
         }
     });
 
     $(document).on("change", ".parent-cat-list input", function () {
         getSubCatList();
     });
-
-    //分类设置
-    // $(document).on('click', '.addcat', function () {
-    //     page.select_i = $(this).data('index');
-    // });
+    //多项选择服务内容
+    $(document).on("click", ".select-service input", function () {
+        
+        if ($(this).prop("checked")) {
+            
+            // $(".cat-item").removeClass("active");
+            $(this).parents().addClass("active");
+            $(this).attr('checked','checked');
+        } else {
+            $(this).parent(".select-service").removeClass("active");
+            $(this).removeAttr('checked');
+        }
+    });
+    //服务内容设置
+    $(document).on('click', '.addcat1', function () {
+        page.select_i = $(this).data('index');
+    });
     //选择分类
     // $(document).on("change", ".parents", function () {
     //     var parent_id=$(this).val();
@@ -1033,8 +1055,8 @@ if (!$returnUrl) {
     });
     //选择分类
     $(document).on("click", ".cat-confirm", function () {
-        var cat_name = $.trim($(".cat-item.active").text());
-        var cat_id = $(".cat-item.active input").val();
+        var cat_name = $.trim($(".select-cat.active").text());
+        var cat_id = $(".select-cat.active input").val();
         if (cat_name && cat_id) {
             page.goods_cat_list[page.select_i]['cat_id'] = cat_id;
             page.goods_cat_list[page.select_i]['cat_name'] = cat_name;
@@ -1069,29 +1091,45 @@ if (!$returnUrl) {
     });
     
     //选择分类
-    // $(document).on("click", ".cat-confirm", function () {
+    $(document).on("click", ".cat-confirm1", function () {
         
-    //     // var cat_id = new Array();
-    //     // $(".cat-item.active input").each(function(i){
-    //     //     cat_id[i] = $(this).val();
-    //     // });
+        // var cat_id = new Array();
+        // $(".cat-item.active input").each(function(i){
+        //     cat_id[i] = $(this).val();
+        // });
         
 
-    //     var cat_name = new Array();
-    //     $(".cat-item.active").each(function(i){
-    //         cat_name[i] = $.trim($(this).text());
-    //     });
-    //     var cat_name_vals = cat_name.join(",");
-    //     $("#service_name_arr").val(cat_name_vals);
-    //     var html='';
-    //     $(".service").empty()
-    //     for (var i = 0; i < cat_name.length; i++) {
-    //         html+='<span class="input-group-addon-service">'+cat_name[i]+'<span class="delelt-span">×</span></span>';
-    //     }
-    //     html+='<a class="select-service addcat" data-toggle="modal" data-target="#catModal" style="color: #0275d8;">选择</a>';
-    //     $(".service").html(html)
-    //     $("#catModal").modal("hide");
-    // });
+        var cat_name = new Array();
+        $(".select-service.active").each(function(i){
+            cat_name[i] = $.trim($(this).text());
+        });
+        var cat_name_vals = cat_name.join(",");
+        $("#service_name_arr").val(cat_name_vals);
+        var html='';
+        $(".service1").empty()
+        for (var i = 0; i < cat_name.length; i++) {
+            html+='<span class="input-group-addon-service">'+cat_name[i]+'<span class="delelt-span">×</span></span>';
+        }
+        html+='<a class="select-service addcat" data-toggle="modal" data-target="#catModal1" style="color: #0275d8;">选择</a>';
+        $(".service1").html(html)
+        $("#catModal1").modal("hide");
+    });
+    //删除服务内容
+    $(document).on('click', '.delelt-span', function () {
+        $(this).parent('span').remove();
+        var span_text=$(this).parent('span').text();
+
+        var span_text=span_text.substring(0,span_text.length-1)
+
+        var service_name_arr=$("#service_name_arr").val();
+        var arr=service_name_arr.split(',');
+        arr.splice($.inArray(span_text,arr),1);
+        var cat_name_vals = arr.join(",");
+        $("#service_name_arr").val(cat_name_vals);
+        // for(var i in service_name_arr.split(',')){
+        //     alert(arr[i])
+        // }
+    });
     //添加新分类
     // $(document).on('click', '.addcat', function () {
     //     var cat = {};
