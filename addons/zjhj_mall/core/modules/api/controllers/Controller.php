@@ -89,6 +89,9 @@ class Controller extends \app\controllers\Controller
         if (!$access_token) {
             $access_token = \Yii::$app->request->post('access_token');
         }
+        if (!$access_token) {
+            $access_token = \Yii::$app->request->getHeaders()->get('Access-token');
+        }
         if ($access_token) {
             \Yii::$app->user->loginByAccessToken($access_token);
         }
