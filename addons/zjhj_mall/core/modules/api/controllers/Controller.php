@@ -113,6 +113,7 @@ class Controller extends \app\controllers\Controller
                 $_acid = \Yii::$app->request->post('_acid');
             }
             $this->store_id = \Yii::$app->request->get('store_id');
+            $this->store_id = 126;
             if ($_acid && $_acid != -1) {
                 $this->store = Store::findOne([
                     'acid' => $_acid,
