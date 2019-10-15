@@ -13,13 +13,15 @@ $returnUrl = Yii::$app->request->referrer;
 if (!$returnUrl) {
     $returnUrl = $urlManager->createUrl([get_plugin_url() . '/goods']);
 }
+$commonDistrict = new \app\models\common\CommonDistrict();
+$district = Yii::$app->serializer->encode($commonDistrict->search());
 ?>
 <script src="<?= Yii::$app->request->baseUrl ?>/statics/mch/js/selectCity/assets/js/data.js"></script>
 <script src="<?= Yii::$app->request->baseUrl ?>/statics/mch/js/selectCity/assets/js/prettify.js"></script>
 <script src="<?= Yii::$app->request->baseUrl ?>/statics/mch/js/selectCity/dist/jquery.city.select.min.js"></script>
 <div class="panel mb-3">
     <div class="panel-header"><?= $this->title ?></div>
-    <div class="panel-body">
+    <div class="panel-body" id="Address">
         <form class="auto-form" method="post" return="<?= $returnUrl ?>">
             <div class="form-group row">
                 <div class="form-group-label col-sm-2 text-right">
@@ -90,10 +92,10 @@ if (!$returnUrl) {
                 </div>
             </div> -->
             <div class="form-group row">
-                    <div style="margin-right: 10px;" class="form-group-label col-sm-2 text-right">
+                    <div class="form-group-label col-sm-2 text-right">
                         <label class="col-form-label required">投放城市</label>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-6" >
                         <div class="input-group">
                             <select class="form-control province" style="float: left;"
                                     name="model[province]">
@@ -132,43 +134,31 @@ if (!$returnUrl) {
 </div>
 
 <script>
-    $(function () {
-        $('#province, #city').citylist({
-            data    : data,
-            id      : 'id',
-            children: 'cities',
-            name    : 'name',
-            metaTag : 'name',
+    // $(function () {
+    //     $('#province, #city').citylist({
+    //         data    : data,
+    //         id      : 'id',
+    //         children: 'cities',
+    //         name    : 'name',
+    //         metaTag : 'name',
+    //     });
+    // });
+    $(function(){
+        var editAddress = new Vue({
+            el: '#Address',
+            data: {
+                province:<?=$district?>,
+                city: [],
+                area: [],
+                sender_province: "<?=$sender->province?>",
+                sender_city: "<?=$sender->city?>",
+                orderList: <?= Yii::$app->serializer->encode($list) ?>
+            }
         });
-    });
-    $(document).on('change', '.parent', function () {
-        var p = $(this).val();
-        if (p == '0') {
-            $('.advert').show();
-        } else {
-            $('input[name="model[advert_url]"]').val('').trigger('change');
-            $('input[name="model[advert_pic]"]').val('').trigger('change');
-            $('input[name="model[advert_pic]"]').next('.image-picker-view').css('background-image', 'url("")');
-            $('.advert').hide();
-        }
-    })
-</script>
-<!--更新地址相关-->
-<script>
-    var editAddress = new Vue({
-        el: '#editAddress',
-        data: {
-            province:<?=$district?>,
-            city: [],
-            sender_province: "<?=$sender->province?>",
-            sender_city: "<?=$sender->city?>",
-        }
-    });
 
-    // 弹框
-    $(document).on("click", ".edit-address", function () {
-        editAddress.sender_province = editAddress.orderList[index].address_data.province
-        editAddress.sender_city = editAddress.orderList[index].address_data.city
+        // 弹框
+        editAddress.sender_province = editAddress.orderList.province
+        editAddress.sender_city = editAddress.orderList.city
         console.log(editAddress.sender_city);
         $('.province').find('option').each(function (i) {
             if ($(this).val() == editAddress.sender_province) {
@@ -182,55 +172,90 @@ if (!$returnUrl) {
                 return true;
             }
         });
-
+        $('.area').find('option').each(function (i) {
+            if ($(this).val() == editAddress.sender_area) {
+                $(this).prop('selected', 'selected');
+                return true;
+            }
+        });
 
         editAddress.city = editAddress.province[0].list;
+        editAddress.area = editAddress.city[0].list;
         $(editAddress.province).each(function (i) {
             if (editAddress.province[i].name == editAddress.sender_province) {
                 editAddress.city = editAddress.province[i].list;
                 return true;
             }
         });
-
-        $('#editAddress').modal('show');
-    });
-
-    $(document).on('change', '.province', function () {
-        var index = $(this).find('option:selected').data('index');
-        editAddress.city = editAddress.province[index].list;
-    });
-
-    // 提交更新
-    $(document).on('click', '.update-address', function () {
-        $('.update-address').btnLoading('更新中');
-        var href = '<?= $urlManager->createUrl(['mch/order/update-order-address']) ?>';
-        $.ajax({
-            url: href,
-            type: "post",
-            data: {
-                orderId: $('.order-id').val(),
-                orderType: $('.order-type').val(),
-                name: $('.name').val(),
-                mobile: $('.mobile').val(),
-                province: $('.province').val(),
-                city: $('.city').val(),
-                district: $('.area').val(),
-                address: $('.address').val(),
-                _csrf: _csrf
-            },
-            dataType: "json",
-            success: function (res) {
-                $('.update-address').btnReset();
-                $.myAlert({
-                    content: res.msg,
-                    confirm: function () {
-                        if (res.code == 0) {
-                            location.reload();
-                        }
-                    }
-                })
+        $(editAddress.city).each(function (i) {
+            if (editAddress.city[i].name == editAddress.sender_city) {
+                editAddress.area = editAddress.city[i].list;
+                return true;
             }
         });
-        return false;
-    });
+
+        $('#editAddress').modal('show');
+
+        $(document).on('change', '.province', function () {
+            var index = $(this).find('option:selected').data('index');
+            editAddress.city = editAddress.province[index].list;
+            editAddress.area = editAddress.city[0].list;
+        });
+        $(document).on('change', '.city', function () {
+            var index = $(this).find('option:selected').data('index');
+            editAddress.area = editAddress.city[index].list;
+        });
+    })
+
+</script>
+<!--更新地址相关-->
+<script>
+    // console.log(<?=$district?>);
+    // var editAddress = new Vue({
+    //     el: '#editAddress',
+    //     data: {
+    //         province:<?=$district?>,
+    //         city: [],
+    //         sender_province: "<?=$sender->province?>",
+    //         sender_city: "<?=$sender->city?>",
+    //     }
+    // });
+
+    // 弹框
+    // $(document).on("click", ".edit-address", function () {
+    //     var sender_province = '<?= $list['province'] ?>';
+    //     var sender_city = '<?= $list['city'] ?>';
+    //     editAddress.sender_province = sender_province
+    //     editAddress.sender_city = sender_city
+    //     console.log(editAddress.sender_city);
+    //     $('.province').find('option').each(function (i) {
+    //         if ($(this).val() == editAddress.sender_province) {
+    //             $(this).prop('selected', 'selected');
+    //             return true;
+    //         }
+    //     });
+    //     $('.city').find('option').each(function (i) {
+    //         if ($(this).val() == editAddress.sender_city) {
+    //             $(this).prop('selected', 'selected');
+    //             return true;
+    //         }
+    //     });
+
+
+    //     editAddress.city = editAddress.province[0].list;
+    //     $(editAddress.province).each(function (i) {
+    //         if (editAddress.province[i].name == editAddress.sender_province) {
+    //             editAddress.city = editAddress.province[i].list;
+    //             return true;
+    //         }
+    //     });
+
+    //     $('#editAddress').modal('show');
+    // });
+
+    // $(document).on('change', '.province', function () {
+    //     var index = $(this).find('option:selected').data('index');
+    //     editAddress.city = editAddress.province[index].list;
+    // });
+
 </script>
