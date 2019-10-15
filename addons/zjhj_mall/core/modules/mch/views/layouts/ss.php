@@ -459,6 +459,10 @@ $district = Yii::$app->serializer->encode($commonDistrict->search());
         var index = $(this).find('option:selected').data('index');
         editAddress.city = editAddress.province_arr[index].list;
     });
+    $(document).on('change', '.city', function () {
+        var index = $(this).find('option:selected').data('index');
+        editAddress.area = editAddress.city[index].list;
+    });
 
     // 提交更新
     $(document).on('click', '.update-address', function () {

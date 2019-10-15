@@ -147,32 +147,32 @@ class Menu
                     //     ],
                     // ],
                     
-                        [
-                            'name' => '柜子管理',
-                            'is_menu' => true,
-                            'route' => 'mch/cabinet/list',
-                            'sub' => [
-                                [
-                                    'name' => '添加柜子(S|U)',
-                                    'is_menu' => false,
-                                    'route' => 'mch/cabinet/cabinet-edit',
-                                ],
+                    [
+                        'name' => '柜子管理',
+                        'is_menu' => true,
+                        'route' => 'mch/cabinet/list',
+                        'sub' => [
+                            [
+                                'name' => '添加柜子(S|U)',
+                                'is_menu' => false,
+                                'route' => 'mch/cabinet/cabinet-edit',
                             ],
-                            'action' => [
-                                [
-                                    'name' => '删除柜子',
-                                    'route' => 'mch/cabinet/cabinet-del'
-                                ],
-                                [
-                                    'name' => '查找自提柜是否可删除',
-                                    'route' => 'mch/cabinet/cabinet-order'
-                                ],
-                                [
-                                    'name' => '查找自提柜地址',
-                                    'route' => 'mch/cabinet/cabinet-address'
-                                ],
-                            ]
                         ],
+                        'action' => [
+                            [
+                                'name' => '删除柜子',
+                                'route' => 'mch/cabinet/cabinet-del'
+                            ],
+                            [
+                                'name' => '查找自提柜是否可删除',
+                                'route' => 'mch/cabinet/cabinet-order'
+                            ],
+                            [
+                                'name' => '查找自提柜地址',
+                                'route' => 'mch/cabinet/cabinet-address'
+                            ],
+                        ]
+                    ],
                             
                         
                     
