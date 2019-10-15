@@ -76,7 +76,7 @@ if (!$returnUrl) {
                     
                 </div>
             </div>
-            <div class="form-group row">
+            <!-- <div class="form-group row">
                 <div class="form-group-label col-sm-2 text-right">
                     <label class="col-form-label required">投放城市</label>
                 </div>
@@ -88,7 +88,27 @@ if (!$returnUrl) {
                         <option value="载入中">载入中</option>
                     </select>
                 </div>
-            </div>
+            </div> -->
+            <div class="form-group row">
+                    <div style="margin-right: 10px;" class="form-group-label col-sm-2 text-right">
+                        <label class="col-form-label required">投放城市</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="input-group">
+                            <select class="form-control province" style="float: left;"
+                                    name="model[province]">
+                                <option v-for="(item,index) in province"
+                                        :value="item.name" :data-index="index">{{item.name}}
+                                </option>
+                            </select>
+                            <select class="form-control city" style="float: left;" name="model[city]">
+                                <option v-for="(item,index) in city"
+                                        :value="item.name" :data-index="index">{{item.name}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
             <div class="form-group row">
                 <div class="form-group-label col-sm-2 text-right">
                     <label class="col-form-label required">详细地址</label>
@@ -132,4 +152,85 @@ if (!$returnUrl) {
             $('.advert').hide();
         }
     })
+</script>
+<!--更新地址相关-->
+<script>
+    var editAddress = new Vue({
+        el: '#editAddress',
+        data: {
+            province:<?=$district?>,
+            city: [],
+            sender_province: "<?=$sender->province?>",
+            sender_city: "<?=$sender->city?>",
+        }
+    });
+
+    // 弹框
+    $(document).on("click", ".edit-address", function () {
+        editAddress.sender_province = editAddress.orderList[index].address_data.province
+        editAddress.sender_city = editAddress.orderList[index].address_data.city
+        console.log(editAddress.sender_city);
+        $('.province').find('option').each(function (i) {
+            if ($(this).val() == editAddress.sender_province) {
+                $(this).prop('selected', 'selected');
+                return true;
+            }
+        });
+        $('.city').find('option').each(function (i) {
+            if ($(this).val() == editAddress.sender_city) {
+                $(this).prop('selected', 'selected');
+                return true;
+            }
+        });
+
+
+        editAddress.city = editAddress.province[0].list;
+        $(editAddress.province).each(function (i) {
+            if (editAddress.province[i].name == editAddress.sender_province) {
+                editAddress.city = editAddress.province[i].list;
+                return true;
+            }
+        });
+
+        $('#editAddress').modal('show');
+    });
+
+    $(document).on('change', '.province', function () {
+        var index = $(this).find('option:selected').data('index');
+        editAddress.city = editAddress.province[index].list;
+    });
+
+    // 提交更新
+    $(document).on('click', '.update-address', function () {
+        $('.update-address').btnLoading('更新中');
+        var href = '<?= $urlManager->createUrl(['mch/order/update-order-address']) ?>';
+        $.ajax({
+            url: href,
+            type: "post",
+            data: {
+                orderId: $('.order-id').val(),
+                orderType: $('.order-type').val(),
+                name: $('.name').val(),
+                mobile: $('.mobile').val(),
+                province: $('.province').val(),
+                city: $('.city').val(),
+                district: $('.area').val(),
+                address: $('.address').val(),
+                _csrf: _csrf
+            },
+            dataType: "json",
+            success: function (res) {
+                $('.update-address').btnReset();
+                $.myAlert({
+                    content: res.msg,
+                    confirm: function () {
+                        if (res.code == 0) {
+                            location.reload();
+                        }
+                    }
+                })
+            }
+        });
+        return false;
+    });
 </script>

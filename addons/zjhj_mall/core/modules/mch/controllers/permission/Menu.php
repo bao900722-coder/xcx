@@ -20,21 +20,6 @@ class Menu
                 'route' => 'mch/store/postage-rules',
                 'icon' => 'icon-setup',
                 'children' => [
-                    // [
-                    //     'name' => '商城设置',
-                    //     'is_menu' => true,
-                    //     'route' => 'mch/store/setting',
-                    // ],
-                    // [
-                    //     'name' => '短信通知',
-                    //     'is_menu' => true,
-                    //     'route' => 'mch/store/sms',
-                    // ],
-                    // [
-                    //     'name' => '邮件通知',
-                    //     'is_menu' => true,
-                    //     'route' => 'mch/store/mail',
-                    // ],
                     [
                         'name' => '运费规则',
                         'is_menu' => true,
