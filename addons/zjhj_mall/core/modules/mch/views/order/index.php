@@ -457,7 +457,7 @@ $urlPlatform = Yii::$app->requestedRoute;
                                 <span class="mr-2"><span
                                             class="titleColor">电话：</span><?= $order_item['mobile'] ?></span>
                                 <span class="mr-3"><span
-                                            class="titleColor">地址：</span><?= $order_item['address'] ?></span>
+                                            class="titleColor">自提柜：</span><?= $order_item['province'] ?><?= $order_item['city'] ?><?= $order_item['address'] ?></span>
                                 <?php if ($order_item['is_send'] == 0) : ?>
                                     <a class="btn btn-sm btn-primary edit-address"
                                        data-index="<?= $k ?>"
@@ -750,7 +750,9 @@ $urlPlatform = Yii::$app->requestedRoute;
 
 <?= $this->render('/layouts/ss', [
     'exportList' => $exportList,
-    'list' => $list
+    'list' => $list,
+    'cabinet' => $cabinet,
+    'province_arr'=>$province_arr,
 ]) ?>
 
 <script>

@@ -317,7 +317,7 @@ $urlHandle = $urlManager->createUrl(['mch/order/refund-handle']);
                             <span class="mr-3"><span class="orderTitle">收货人：</span><?= $order_item['name'] ?></span>
                             <span class="mr-3"><span
                                         class="orderTitle">电话：</span><?= $order_item['mobile'] ?></span>
-                            <span><span class="orderTitle">地址：</span><?= $order_item['address'] ?></span>
+                            <span><span class="orderTitle">地址：</span><?= $order_item['province'] ?><?= $order_item['city'] ?><?= $order_item['caddress'] ?></span>
                         </td>
                     </tr>
                 </table>

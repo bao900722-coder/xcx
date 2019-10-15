@@ -707,7 +707,87 @@ if (!$returnUrl) {
                             <?= $this->render('/layouts/attrs/attr_setting', [
                                 'goods' => $goods,
                             ]) ?>
-
+                            <div <?= in_array(get_plugin_type(), [5]) ? 'hidden' : '' ?> class="step-block" flex="dir:left box:first">
+                                <div>
+                                    <span>商品存放类型</span>
+                                    <span class="step-location" id="step6"></span>
+                                </div>
+                                <div>
+                                    <?php if ($goods['storage_type']==1) : ?>
+                                        <div class="col-9 col-form-label">
+                                            <label class="radio-label">
+                                                <input checked="checked" value="1" name="model[storage_type]" type="radio" class="custom-control-input">
+                                                <span class="label-icon"></span>
+                                                <span class="label-text">常温</span>
+                                            </label>
+                                            <label class="radio-label">
+                                                <input value="2" name="model[storage_type]" type="radio" class="custom-control-input">
+                                                <span class="label-icon"></span>
+                                                <span class="label-text">冷藏</span>
+                                            </label>
+                                            <label class="radio-label">
+                                                <input value="3" name="model[storage_type]" type="radio" class="custom-control-input">
+                                                <span class="label-icon"></span>
+                                                <span class="label-text">冷冻</span>
+                                            </label>
+                                        </div>
+                                    <?php elseif ($goods['storage_type']==2) : ?>
+                                        <div class="col-9 col-form-label">
+                                            <label class="radio-label">
+                                                <input value="1" name="model[storage_type]" type="radio" class="custom-control-input">
+                                                <span class="label-icon"></span>
+                                                <span class="label-text">常温</span>
+                                            </label>
+                                            <label class="radio-label">
+                                                <input checked="checked" value="2" name="model[storage_type]" type="radio" class="custom-control-input">
+                                                <span class="label-icon"></span>
+                                                <span class="label-text">冷藏</span>
+                                            </label>
+                                            <label class="radio-label">
+                                                <input value="3" name="model[storage_type]" type="radio" class="custom-control-input">
+                                                <span class="label-icon"></span>
+                                                <span class="label-text">冷冻</span>
+                                            </label>
+                                        </div>
+                                    <?php elseif ($goods['storage_type']==3) : ?>
+                                        <div class="col-9 col-form-label">
+                                            <label class="radio-label">
+                                                <input value="1" name="model[storage_type]" type="radio" class="custom-control-input">
+                                                <span class="label-icon"></span>
+                                                <span class="label-text">常温</span>
+                                            </label>
+                                            <label class="radio-label">
+                                                <input value="2" name="model[storage_type]" type="radio" class="custom-control-input">
+                                                <span class="label-icon"></span>
+                                                <span class="label-text">冷藏</span>
+                                            </label>
+                                            <label class="radio-label">
+                                                <input checked="checked" value="3" name="model[storage_type]" type="radio" class="custom-control-input">
+                                                <span class="label-icon"></span>
+                                                <span class="label-text">冷冻</span>
+                                            </label>
+                                        </div>
+                                    <?php else : ?>
+                                        <div class="col-9 col-form-label">
+                                            <label class="radio-label">
+                                                <input value="1" name="model[storage_type]" type="radio" class="custom-control-input">
+                                                <span class="label-icon"></span>
+                                                <span class="label-text">常温</span>
+                                            </label>
+                                            <label class="radio-label">
+                                                <input value="2" name="model[storage_type]" type="radio" class="custom-control-input">
+                                                <span class="label-icon"></span>
+                                                <span class="label-text">冷藏</span>
+                                            </label>
+                                            <label class="radio-label">
+                                                <input value="3" name="model[storage_type]" type="radio" class="custom-control-input">
+                                                <span class="label-icon"></span>
+                                                <span class="label-text">冷冻</span>
+                                            </label>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
 
                             <!-- <div <?= in_array(get_plugin_type(), [5]) ? 'hidden' : '' ?> class="step-block" flex="dir:left box:first">
                                 <div>

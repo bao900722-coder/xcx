@@ -68,11 +68,14 @@ class OrderController extends Controller
         if ($shop_id) {
             $shop = Shop::findOne(['store_id' => $this->store->id, 'id' => $shop_id]);
         }
-
+        // print_r($data);die;
+        // print_r($data['list']);die;
         return $this->render('index', [
             'row_count' => $data['row_count'],
             'pagination' => $data['pagination'],
             'list' => $data['list'],
+            'cabinet' => $data['cabinet'],
+            'province_arr' => $data['province_arr'],
             'store_data' => $store_data_form->search(),
             'express_list' => $this->getExpressList(),
             'user' => $user,
@@ -511,7 +514,6 @@ class OrderController extends Controller
         $commonUpdateAddress = new CommonUpdateAddress();
         $commonUpdateAddress->data = \Yii::$app->request->post();
         $updateAddress = $commonUpdateAddress->updateAddress();
-
         return $updateAddress;
 
     }
@@ -522,4 +524,5 @@ class OrderController extends Controller
         $print = new PinterOrder($this->store->id, $get['order_id'], 'reprint', $get['order_type']);
         return $print->print_order();
     }
+
 }

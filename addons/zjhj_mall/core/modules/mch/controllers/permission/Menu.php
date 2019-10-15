@@ -17,24 +17,24 @@ class Menu
             [
                 'name' => '系统管理',
                 'is_menu' => true,
-                'route' => '',
+                'route' => 'mch/store/postage-rules',
                 'icon' => 'icon-setup',
                 'children' => [
-                    [
-                        'name' => '商城设置',
-                        'is_menu' => true,
-                        'route' => 'mch/store/setting',
-                    ],
-                    [
-                        'name' => '短信通知',
-                        'is_menu' => true,
-                        'route' => 'mch/store/sms',
-                    ],
-                    [
-                        'name' => '邮件通知',
-                        'is_menu' => true,
-                        'route' => 'mch/store/mail',
-                    ],
+                    // [
+                    //     'name' => '商城设置',
+                    //     'is_menu' => true,
+                    //     'route' => 'mch/store/setting',
+                    // ],
+                    // [
+                    //     'name' => '短信通知',
+                    //     'is_menu' => true,
+                    //     'route' => 'mch/store/sms',
+                    // ],
+                    // [
+                    //     'name' => '邮件通知',
+                    //     'is_menu' => true,
+                    //     'route' => 'mch/store/mail',
+                    // ],
                     [
                         'name' => '运费规则',
                         'is_menu' => true,
@@ -75,24 +75,24 @@ class Menu
                             ],
                         ]
                     ],
-                    [
-                        'name' => '电子面单',
-                        'is_menu' => true,
-                        'route' => 'mch/store/express',
-                        'sub' => [
-                            [
-                                'name' => '快递单打印(S|U)',
-                                'is_menu' => false,
-                                'route' => 'mch/store/express-edit',
-                            ]
-                        ],
-                        'action' => [
-                            [
-                                'name' => '快递打印单删除',
-                                'route' => 'mch/store/express-del',
-                            ],
-                        ]
-                    ],
+                    // [
+                    //     'name' => '电子面单',
+                    //     'is_menu' => true,
+                    //     'route' => 'mch/store/express',
+                    //     'sub' => [
+                    //         [
+                    //             'name' => '快递单打印(S|U)',
+                    //             'is_menu' => false,
+                    //             'route' => 'mch/store/express-edit',
+                    //         ]
+                    //     ],
+                    //     'action' => [
+                    //         [
+                    //             'name' => '快递打印单删除',
+                    //             'route' => 'mch/store/express-del',
+                    //         ],
+                    //     ]
+                    // ],
                     [
                         'name' => '小票打印',
                         'is_menu' => true,
@@ -134,18 +134,48 @@ class Menu
                             ],
                         ],
                     ],
-                    [
-                        'name' => '退货地址',
-                        'is_menu' => true,
-                        'route' => 'mch/refund-address/index',
-                        'sub' => [
-                            [
-                                'name' => '退货地址编辑',
-                                'is_menu' => false,
-                                'route' => 'mch/refund-address/edit',
+                    // [
+                    //     'name' => '退货地址',
+                    //     'is_menu' => true,
+                    //     'route' => 'mch/refund-address/index',
+                    //     'sub' => [
+                    //         [
+                    //             'name' => '退货地址编辑',
+                    //             'is_menu' => false,
+                    //             'route' => 'mch/refund-address/edit',
+                    //         ]
+                    //     ],
+                    // ],
+                    
+                        [
+                            'name' => '柜子管理',
+                            'is_menu' => true,
+                            'route' => 'mch/cabinet/list',
+                            'sub' => [
+                                [
+                                    'name' => '添加柜子(S|U)',
+                                    'is_menu' => false,
+                                    'route' => 'mch/cabinet/cabinet-edit',
+                                ],
+                            ],
+                            'action' => [
+                                [
+                                    'name' => '删除柜子',
+                                    'route' => 'mch/cabinet/cabinet-del'
+                                ],
+                                [
+                                    'name' => '查找自提柜是否可删除',
+                                    'route' => 'mch/cabinet/cabinet-order'
+                                ],
+                                [
+                                    'name' => '查找自提柜地址',
+                                    'route' => 'mch/cabinet/cabinet-address'
+                                ],
                             ]
                         ],
-                    ],
+                            
+                        
+                    
                 ],
             ],
             // [

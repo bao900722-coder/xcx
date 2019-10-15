@@ -13,6 +13,7 @@ use app\models\Goods;
 use app\models\Order;
 use app\models\OrderDetail;
 use app\models\OrderRefund;
+use app\models\Cabinet;
 use app\models\RefundAddress;
 class OrderRefundDetailForm extends MchModel
 {
@@ -33,11 +34,12 @@ class OrderRefundDetailForm extends MchModel
             ->leftJoin(['g' => Goods::tableName()], 'od.goods_id=g.id')
             ->leftJoin(['r' => RefundAddress::tableName()],'or.address_id=r.id')
             ->leftJoin(['o' => Order::tableName()], 'or.order_id=o.id')
+            ->leftJoin(['c' => Cabinet::tableName()], 'o.cabinet_id=c.id')
             ->where([
                 'or.id' => $this->order_refund_id,
                 'or.is_delete' => 0,
             ])
-            ->select('or.id order_refund_id,or.order_refund_no,or.order_id,od.num,od.total_price,od.attr,or.desc refund_desc,or.type refund_type,or.status refund_status,or.refuse_desc,or.pic_list refund_pic_list,or.refund_price,or.is_agree,or.is_user_send,or.user_send_express,or.user_send_express_no,r.name as re_name,r.mobile as re_mobile,r.address as re_address,o.order_no, o.addtime order_time, o.name username, o.mobile, o.pay_price, o.express_price, o.express_price_1, o.discount')
+            ->select('or.id order_refund_id,or.order_refund_no,or.order_id,od.num,od.total_price,od.attr,or.desc refund_desc,or.type refund_type,or.status refund_status,or.refuse_desc,or.pic_list refund_pic_list,or.refund_price,or.is_agree,or.is_user_send,or.user_send_express,or.user_send_express_no,r.name as re_name,r.mobile as re_mobile,r.address as re_address,o.order_no, o.addtime order_time, o.name username, o.mobile, o.pay_price, o.express_price, o.express_price_1, o.discount,c.province,c.city,c.address as caddress')
             ->asArray()->one();
         if (!$order_refund) {
             return [

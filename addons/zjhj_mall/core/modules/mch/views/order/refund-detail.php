@@ -143,7 +143,7 @@ $urlStr = get_plugin_url();
                                         <span>电话：<?= $list['re_mobile'] ?></span>
                                     </div>
                                     <div>
-                                        <span>收货地址：<?= $list['re_address'] ?></span>
+                                        <span>收货地址：<?= $list['province'] ?><?= $list['city'] ?><?= $list['caddress'] ?></span>
                                     </div>
                                 </td>
                             </tr>

@@ -49,6 +49,7 @@ use yii\helpers\VarDumper;
  * @property integer $is_level
  * @property integer $confine_count
  * @property integer $is_negotiable
+ * @property integer $storage_type
  */
 class Goods extends \yii\db\ActiveRecord
 {
@@ -73,7 +74,7 @@ class Goods extends \yii\db\ActiveRecord
     {
         return [
             [['store_id', 'name', 'detail', 'attr'], 'required'],
-            [['store_id', 'cat_id', 'status', 'addtime', 'is_delete', 'sort', 'individual_share', 'freight', 'use_attr', 'share_type', 'quick_purchase', 'hot_cakes', 'mch_id', 'goods_num', 'member_discount', 'virtual_sales', 'mch_sort', 'type', 'is_level', 'confine_count', 'is_negotiable'], 'integer'],
+            [['store_id', 'cat_id', 'status', 'addtime', 'is_delete', 'sort', 'individual_share', 'freight', 'use_attr', 'share_type', 'quick_purchase', 'hot_cakes', 'mch_id', 'goods_num', 'member_discount', 'virtual_sales', 'mch_sort', 'type', 'is_level', 'confine_count', 'is_negotiable', 'storage_type'], 'integer'],
             [['price', 'original_price', 'merchant_price', 'share_commission_first', 'share_commission_second', 'share_commission_third', 'weight', 'cost_price', 'rebate'], 'number'],
             [['detail', 'attr', 'cover_pic', 'full_cut', 'integral'], 'string'],
             [['name', 'unit'], 'string', 'max' => 255],
@@ -128,6 +129,7 @@ class Goods extends \yii\db\ActiveRecord
             'is_level' => '是否享受会员折扣',
             'confine_count' => '购买限制:0.不限制|大于0等于限购数量',
             'is_negotiable' => '面议方式',
+            'storage_type' => '商品存放类型',
         ];
     }
 

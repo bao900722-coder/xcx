@@ -72,6 +72,7 @@ class GoodsForm extends MchModel
 
     public $intro;
     public $marketing;
+    public $storage_type;
 
     /**
      * @return array
@@ -81,7 +82,7 @@ class GoodsForm extends MchModel
         return [
             [['name', 'service', 'unit', 'goods_no'], 'trim'],
             [['store_id', 'name', 'price', 'cat_id', 'detail', 'goods_pic_list', 'cover_pic', 'attr_setting_type'], 'required'],
-            [['store_id', 'share_type', 'quick_purchase', 'hot_cakes', 'is_level', 'is_negotiable', 'marketing'], 'integer'],
+            [['store_id', 'share_type', 'quick_purchase', 'hot_cakes', 'is_level', 'is_negotiable', 'marketing', 'storage_type'], 'integer'],
             [['price', 'original_price', 'merchant_price'], 'number', 'min' => 0.01, 'max' => 99999999],
             [['detail', 'intro', 'service', 'cover_pic', 'video_url', 'goods_no'], 'string'],
             [['name', 'goods_no', 'unit'], 'string', 'max' => 255],
@@ -137,6 +138,7 @@ class GoodsForm extends MchModel
             'single_share_commission_second' => '二级佣金',
             'single_share_commission_third' => '三级佣金',
             'marketing'=>'营销类型',
+            'storage_type' => '商品存放类型',
         ];
     }
 
@@ -245,7 +247,12 @@ class GoodsForm extends MchModel
                     'msg' => '商品售价超过限制',
                 ];
             }
-
+            if (!$this->storage_type && ($this->storage_type === null || $this->storage_type === '')) {
+                return [
+                    'code' => 1,
+                    'msg' => '请选择商品存放类型',
+                ];
+            }
 
             // 商品规格有特殊符不能提交
             if (isset($this->attr) && count($this->attr) > 0 && $this->use_attr) {
@@ -330,7 +337,7 @@ class GoodsForm extends MchModel
 
             $goods->intro = $this->intro;//商品简介
             $goods->marketing = $this->marketing;//商品营销类型
-
+            $goods->storage_type = $this->storage_type;//商品存放类型
             if ($goods->save()) {
                 //多分类设置
                 GoodsCat::updateAll(['is_delete' => 1], ['goods_id' => $goods->id]);
