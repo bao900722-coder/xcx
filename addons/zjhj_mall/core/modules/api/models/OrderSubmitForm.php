@@ -11,6 +11,7 @@ namespace app\modules\api\models;
 use app\models\Address;
 use app\models\Attr;
 use app\models\AttrGroup;
+use app\models\Cabinet;
 use app\models\Cart;
 use app\models\common\api\CommonOrder;
 use app\models\Coupon;
@@ -52,6 +53,7 @@ class OrderSubmitForm extends OrderData
     public $cart_id_list;
     public $cart_list;
     public $goods_info;
+    public $cabinet_id;
 
     public $user_coupon_id;
 
@@ -79,7 +81,7 @@ class OrderSubmitForm extends OrderData
     {
         return [
             [['cart_id_list', 'goods_info', 'content', 'address_name', 'address_mobile', 'cart_list', 'mch_list'], 'string'],
-            [['address_id',], 'required', 'on' => "EXPRESS"],
+            [['cabinet_id'], 'required', 'on' => "EXPRESS"],
             [['address_name', 'address_mobile'], 'required', 'on' => "OFFLINE"],
             [['user_coupon_id', 'offline', 'shop_id', 'use_integral'], 'integer'],
             [['type'], 'default', 'value' => 0],
@@ -720,13 +722,17 @@ class OrderSubmitForm extends OrderData
                 'store_id' => $this->store_id,
                 'user_id' => $this->user_id,
             ]);
-            if (!$address) {
-                return [
-                    'code' => 1,
-                    'msg' => '收货地址不存在',
-                ];
-            }
-            $this->address = $address;
+            $cabinet = Cabinet::findOne([
+                'id' => $this->cabinet_id,
+                'store_id' => $this->store_id,
+            ]);
+//            if (!$address) {
+//                return [
+//                    'code' => 1,
+//                    'msg' => '收货地址不存在',
+//                ];
+//            }
+            //$this->address = $address;
 
             $area = TerritorialLimitation::findOne([
                 'store_id' => $this->store_id,
@@ -838,6 +844,7 @@ class OrderSubmitForm extends OrderData
             $order->store_id = $this->store_id;
             $order->user_id = $this->user_id;
             $order->order_no = $this->getOrderNo();
+            $order->cabinet_id = $this->cabinet_id;
 
             // 此处判断起送规则
             $this->total_price = $total_price;
@@ -908,10 +915,10 @@ class OrderSubmitForm extends OrderData
                 $order->mobile = $address->mobile;
                 $order->name = $address->name;
                 $order->address_data = json_encode([
-                    'province' => $address->province,
-                    'city' => $address->city,
+                    'province' => $cabinet->province,
+                    'city' => $cabinet->city,
                     'district' => $address->district,
-                    'detail' => $address->detail,
+                    'detail' => $cabinet->address,
                 ], JSON_UNESCAPED_UNICODE);
             } else {
                 $order->name = $this->address_name;

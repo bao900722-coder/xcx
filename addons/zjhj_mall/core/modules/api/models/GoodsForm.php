@@ -151,6 +151,7 @@ class GoodsForm extends ApiModel
             'unit' => $goods->unit,
             'use_attr' => intval($goods->use_attr),
             'mch' => $mch,
+            'storage_type' =>$goods->storage_type,
             'max_share_price' => sprintf('%.2f', $res['max_share_price']),
             'min_member_price' => sprintf('%.2f', $res['min_member_price']),
             'is_share' => $res['is_share'],
