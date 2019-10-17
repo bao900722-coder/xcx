@@ -1352,9 +1352,13 @@ class OrderSubmitForm extends OrderData
             ];
         }
         $attr_id_list = [];
+        //var_dump($goods_info->attr);die;
 
+//        foreach ($goods_info->attr as $item) {
+//            array_push($attr_id_list, $item->attr_list->attr_id);
+//        }
         foreach ($goods_info->attr as $item) {
-            array_push($attr_id_list, $item->attr_list->attr_id);
+            array_push($attr_id_list, $item->attr_id);
         }
 
         $total_price = 0;
