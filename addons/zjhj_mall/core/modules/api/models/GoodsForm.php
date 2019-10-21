@@ -80,14 +80,22 @@ class GoodsForm extends ApiModel
             }
         }
         $new_service_list = [];
+        //获取service_json
+        $serviceJson = Option::find()->select('value')->where(['store_id' => $this->store_id, 'name' => 'good_services'])->asArray()->all();
+        $service_listArr = json_decode($serviceJson[0]['value'], true);
         if (is_array($service_list)) {
-            foreach ($service_list as $item) {
-                $item = trim($item);
-                if ($item) {
-                    $new_service_list[] = $item;
+            foreach ($service_list as $k => $item) {
+                foreach ($service_listArr as $key => $value){
+                    $item = trim($item);
+                    if ($item && $item == $value['service']) {
+                        $new_service_list[$k]['service_name'] = $item;
+                        $new_service_list[$k]['service_desc'] = $value['service_desc'];
+                    }
                 }
+
             }
         }
+        $new_service_list = array_values($new_service_list);
         $price = [];
         foreach (json_decode($goods->attr) as $v) {
             if ($v->price > 0) {
@@ -145,7 +153,8 @@ class GoodsForm extends ApiModel
             'attr_group_list' => $goods->getAttrGroupList(),
             'num' => $goods->getNum(),
             'is_favorite' => $is_favorite,
-            'service_list' => $new_service_list,
+            'service_list' => array_column($new_service_list,'service_name'),
+            'service_info' => $new_service_list,
             'original_price' => sprintf('%.2f', $goods->original_price),
             'video_url' => $goods->video_url,
             'unit' => $goods->unit,
