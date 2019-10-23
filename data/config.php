@@ -5,7 +5,7 @@ $config = array();
 
 $config['db']['master']['host'] = '127.0.0.1';
 $config['db']['master']['username'] = 'root';
-$config['db']['master']['password'] = '123456';
+$config['db']['master']['password'] = 'Wangbao900722';
 $config['db']['master']['port'] = '3306';
 $config['db']['master']['database'] = 'xcx';
 $config['db']['master']['charset'] = 'utf8';
@@ -20,7 +20,7 @@ $config['db']['slave']['1']['port'] = '3307';
 $config['db']['slave']['1']['database'] = '';
 $config['db']['slave']['1']['charset'] = 'utf8';
 $config['db']['slave']['1']['pconnect'] = 0;
-$config['db']['slave']['1']['tablepre'] = 'ims_';
+$config['db']['slave']['1']['tablepre'] = 'hjmallind_';
 $config['db']['slave']['1']['weight'] = 0;
 
 $config['db']['common']['slave_except_table'] = array('core_sessions');

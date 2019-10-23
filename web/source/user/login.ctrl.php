@@ -3,7 +3,6 @@
  * [WeEngine System] Copyright (c) 2014 WE7.CC
  * WeEngine is NOT a free software, it under the license terms, visited http://www.we7.cc/ for more details.
  */
-echo phpinfo();die;
 defined('IN_IA') or exit('Access Denied');
 define('IN_GW', true);
 
@@ -11,7 +10,7 @@ load()->model('user');
 load()->model('message');
 load()->classs('oauth2/oauth2client');
 load()->model('setting');
-
+//var_dump($_W);die;
 if (checksubmit() || $_W['isajax']) {
 	_login($_GPC['referer']);
 }
